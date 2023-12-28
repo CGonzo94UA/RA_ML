@@ -19,16 +19,6 @@ double sign(double x){
         return -1.0;
 }
 
-double Perceptron::dot(const vector<double>& v1, const vector<double>& v2) {
-	double sum = 0;
-	for (size_t i = 0; i < v1.size() - 1; i++) {
-		sum += v1[i] * v2[i];
-	}
-	return sum;
-    
-    //return inner_product(v1.begin(), v1.end() - 1, v2.begin(), 0.0);
-}
-
 Matrix Perceptron::generateRandomWeights(std::size_t const num_weights){
     std::random_device seed;
 	std::default_random_engine generator(seed());
@@ -41,46 +31,6 @@ Matrix Perceptron::generateRandomWeights(std::size_t const num_weights){
 
     return weights;
 }
-
-/*
-void Perceptron::train_(Matrix const& X, std::vector<double> const& Y, std::size_t const maxiter){
-    int total_errors = 0;
-
-    for (size_t i = 0; i < maxiter; ++i) {
-        total_errors = 0;
-        //std::random_device seed;
-        //shuffle(X.matrix().begin(), X.matrix().end(), seed);
-
-        for (size_t j = 0; j < X.rows(); j++) {
-            double dot_product = dot(X[j], _weights);
-            std::cout << "Dot product: " << dot_product << std::endl;
-
-            // Add bias
-            dot_product += _bias * _weights.back();
-            std::cout << "Dot product + bias: " << dot_product << std::endl;
-
-            double calculatedOutput = sign(dot_product);
-            std::cout << "Calculated output: " << calculatedOutput << std::endl;
-            double error = Y[j] - calculatedOutput;
-            std::cout << "Error: " << error << std::endl;
-
-            if (error != 0) {
-                total_errors++;
-                //Perform training
-                for (int k = 0; k < _weights.size() - 1; k++) {
-                    _weights[k] += X[j][k] * error;
-                }
-                _weights.back() += _bias * error;
-            }
-        }
-        double accuracy = total_errors/X.rows();
-        std::cout << "Iteration: " << i << " Accuracy: " << accuracy << std::endl;
-        if (total_errors == 0) {
-            break;
-        }
-
-    }
-}*/
 
 void Perceptron::train(Matrix const& X, Matrix const& Y, std::size_t const maxiter){
     

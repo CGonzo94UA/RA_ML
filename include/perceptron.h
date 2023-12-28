@@ -10,8 +10,6 @@ class Perceptron{
 	    ~Perceptron() {}
 
         Matrix weights() const { return _weights; }
-        double dot(const vector<double>&, const vector<double>&);
-        //void train_(Matrix const& X, std::vector<double> const& Y, std::size_t const maxiter);
         void train(Matrix const& X, Matrix const& Y, std::size_t const maxiter);
         double classify(const Matrix&);
 
