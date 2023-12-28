@@ -7,9 +7,10 @@
 using namespace std;
 
 class Matrix {
-    size_t _rows;
-    size_t _cols;
-    vector<vector<double>> _matrix;
+    private:
+        size_t _rows;
+        size_t _cols;
+        vector<vector<double>> _matrix;
 
     public:
     // Constructors
@@ -22,6 +23,7 @@ class Matrix {
     // Methods
     size_t rows() const;
     size_t cols() const;
+    size_t size() const;
     vector<vector<double>> matrix() const;
 
     // Access operator

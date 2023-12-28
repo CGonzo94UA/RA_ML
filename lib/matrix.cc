@@ -50,6 +50,10 @@ size_t Matrix::cols() const {
     return _cols;
 }
 
+size_t Matrix::size() const {
+    return _rows * _cols;
+}
+
 vector<vector<double>> Matrix::matrix() const {
     return _matrix;
 }
