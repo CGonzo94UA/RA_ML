@@ -39,12 +39,15 @@ class Matrix {
     Matrix operator-(const Matrix&) const;
     Matrix operator*(const Matrix&) const;
     Matrix operator*(double) const;
-    // Matrix operator!=(const Matrix&) const;
+    Matrix operator!=(const Matrix&) const;
+    Matrix& operator+=(const Matrix& R);
     // Matrix operator==(const Matrix&) const;
     
     // Operations
-    size_t sumcol(const size_t) const;
+    double sumcol(const size_t) const;
     Matrix transpose() const;
+    Matrix mult(size_t, double) const;
+
 
     // Friend functions
     friend Matrix operator*(double, const Matrix&);

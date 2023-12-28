@@ -1,6 +1,7 @@
 #include "matrix.h"
 #include <iostream>
 #include <vector>
+#include <numeric>
 
 using namespace std;
 
@@ -131,10 +132,41 @@ Matrix Matrix::operator*(double c) const {
     return result;
 }
 
+Matrix Matrix::operator!=(const Matrix& R) const {
+    if (_rows != R._rows || _cols != R._cols)
+        throw "Matrix dimensions must agree";
+    Matrix result(_rows, _cols);
+    for (size_t i = 0; i < _rows; i++) {
+        for (size_t j = 0; j < _cols; j++){
+            //Result is 1.0 if the elements are different, 0.0 otherwise
+            if (_matrix[i][j] != R[i][j]){
+                result[i][j] = 1.0;
+            }
+            else{
+                result[i][j] = 0.0;
+            }
+        }
+            
+    }
+    return result;
+}
+
+Matrix& Matrix::operator+=(const Matrix& R) {
+    if (_rows != R._rows || _cols != R._cols)
+        throw "Matrix dimensions must agree";
+
+    for (size_t i = 0; i < _rows; i++) {
+        for (size_t j = 0; j < _cols; j++){
+            _matrix[i][j] += R[i][j];
+        }
+    }
+    return *this;  // Return a reference to the modified object
+}
+
 // ============================================
 // =============== Operations =================
-size_t Matrix::sumcol(const size_t col) const {
-    size_t sum = 0;
+double Matrix::sumcol(const size_t col) const {
+    double sum = 0;
     for (size_t i = 0; i < _rows; i++)
         sum += _matrix[i][col];
     return sum;
@@ -149,6 +181,13 @@ Matrix Matrix::transpose() const {
     return result;
 }
 
+Matrix Matrix::mult(size_t index, double scalar) const{
+    Matrix result(1, _cols, _matrix[index]);
+    result = result * scalar;
+    return result;
+}
+
+
 // ============================================
 // =============== Friend functions ===========
 Matrix operator*(double c, const Matrix& R) {
@@ -156,6 +195,8 @@ Matrix operator*(double c, const Matrix& R) {
 }
 
 ostream& operator<<(ostream& os, const Matrix& R) {
+    // start in a new line
+    os << "\n";
     for (size_t i = 0; i < R._rows; i++) {
         for (size_t j = 0; j < R._cols; j++)
             os << R[i][j] << " ";
