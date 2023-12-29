@@ -2,6 +2,8 @@
 #include <vector>
 #include <random>
 #include <algorithm>
+#include <fstream>
+#include <sstream>
 
 // ============================================
 // =============== Constructor ================
@@ -53,10 +55,15 @@ void Perceptron::train(Matrix const& X, Matrix const& Y, std::size_t const maxit
             bestAccuracy = accuracy;
             wBest = _weights;  // Copy the weights
         }
-        std::cout << "Iteration: " << i << " Accuracy: " << accuracy << std::endl;
+        if (i % 10 == 0)
+            std::cout << "Iteration: " << i << " Accuracy: " << accuracy << std::endl;
 
         // If there are no errors, stop training
         if(numErrors == 0){
+            std::cout << "========================================" << std::endl;
+            std::cout << "| No errors found. Stopping training." << std::endl;
+            std::cout << "| Iteration: " << i << " Accuracy: " << accuracy << std::endl;
+            std::cout << "========================================" << std::endl;
             break;
         }
         // Picks an example from (x1 , Y1) · · · (xN, YN) that is currently misclassified, call it (x(t) , y(t)), and
@@ -97,3 +104,61 @@ double Perceptron::classify(const Matrix& input){
     return predicted[0][0];
 }
 
+
+std::pair<Matrix, Matrix> Perceptron::readFromCSV(std::string const& filename){
+    // Rellenar y devolver matriz de prueba
+    std::ifstream file(filename);
+    std::string line;
+
+    std::vector<double> vectorX;
+    std::vector<double> vectorY;
+    std::size_t rowCount = 0;
+    size_t num_inputs = 0;
+
+    while (std::getline(file, line, '\n')) {
+        std::stringstream ss(line);
+        //std::cout << line << '\n';
+        std::vector<std::string> tokens;
+        
+        // Dividir la línea en tokens utilizando el delimitador ","
+        while (std::getline(ss, line, ',')) {
+            tokens.push_back(line);
+        }
+        num_inputs = tokens.size() -1;
+
+        // Leer los primeros 7 valores y colocar un 1 en la primera posición en el vectorX
+        vectorX.push_back(1.0);
+        for (std::size_t i = 0; i < tokens.size(); ++i) {
+            double value = std::stod(tokens[i]);
+            //std::cout << "Value "<< value << "\n";
+            if(i < num_inputs){
+                vectorX.push_back(value);
+            }else{
+                // Leer último valor en el vectorY
+                vectorY.push_back(value);
+            }
+            
+        }
+
+        // Incrementar el contador de filas
+        ++rowCount;
+    }
+
+    Matrix X{rowCount, num_inputs +1, vectorX};
+    Matrix Y{rowCount, 1, vectorY};
+    
+    return std::make_pair(X, Y);
+     
+}
+
+double Perceptron::test(Matrix const& X, Matrix const& Y) const{
+    // Multiply the input matrix by the weights
+    Matrix product = X * _weights;
+    // Get the predicted output
+    Matrix predicted = product.apply(sign);
+    // Get the number of errors
+    Matrix errors = predicted != Y;
+    double numErrors = errors.sumcol(0);
+    double accuracy = 1.0 - (numErrors / static_cast<double>(Y.rows()));
+    return accuracy;
+}

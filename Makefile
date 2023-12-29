@@ -22,6 +22,11 @@ TARGET := programa.out
 # Regla principal
 all: $(BUILD_DIR) $(TARGET)
 
+recode: clean all
+
+exec: recode
+	./$(TARGET)
+
 # Regla para el ejecutable
 $(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $^

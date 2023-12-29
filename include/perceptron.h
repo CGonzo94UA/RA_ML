@@ -7,11 +7,14 @@
 class Perceptron{
     public:
         Perceptron(std::size_t const num_weights);
+        Perceptron(Matrix const& weights) : _weights(weights) {}
 	    ~Perceptron() {}
 
         Matrix weights() const { return _weights; }
         void train(Matrix const& X, Matrix const& Y, std::size_t const maxiter);
         double classify(const Matrix&);
+        static std::pair<Matrix, Matrix> readFromCSV(std::string const& filename);
+        double test(Matrix const& X, Matrix const& Y) const;
 
     private:
         Matrix _weights;

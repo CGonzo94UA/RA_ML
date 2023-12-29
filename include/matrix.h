@@ -25,6 +25,7 @@ class Matrix {
     size_t cols() const;
     size_t size() const;
     vector<vector<double>> matrix() const;
+    vector<double> getCol(size_t) const;
 
     // Access operator
     vector<double>& operator[](size_t);

@@ -59,6 +59,14 @@ vector<vector<double>> Matrix::matrix() const {
     return _matrix;
 }
 
+vector<double> Matrix::getCol(size_t col) const {
+    vector<double> result(_rows);
+    for (size_t i = 0; i < _rows; i++) {
+        result[i] = _matrix[i][col];
+    }
+    return result;
+}
+
 // ============================================
 // =============== Access op. =================
 vector<double>& Matrix::operator[](size_t i) {
