@@ -19,32 +19,14 @@ std::string printVector(std::vector<T> const& v) {
     return ss.str();
 }
 
-std::pair<Matrix, Matrix> divideDataset(Matrix const& m, double const trainRatio) {
-    size_t const trainSize = static_cast<size_t>(m.rows() * trainRatio);
-    size_t const testSize = m.rows() - trainSize;
-
-    Matrix train(trainSize, m.cols());
-    Matrix test(testSize, m.cols());
-
-    for (size_t i = 0; i < trainSize; ++i) {
-        train[i] = m[i];
-    }
-
-    for (size_t i = 0; i < testSize; ++i) {
-        test[i] = m[i + trainSize];
-    }
-
-    return {train, test};
-}
-
 int main() {
     auto [X, Y] = Perceptron::readFromCSV("datasets/128entradas.csv");
     int maxiter = 1000;
 
     #ifdef DIVIDE_DATASET
         double trainRatio = 0.8;
-        auto [Xtrain, Xtest] = divideDataset(X, trainRatio);
-        auto [Ytrain, Ytest] = divideDataset(Y, trainRatio);
+        auto [Xtrain, Xtest] = X.divide(trainRatio);
+        auto [Ytrain, Ytest] = Y.divide(trainRatio);
 
         Perceptron perceptron(Xtrain.cols());
 

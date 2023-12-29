@@ -26,6 +26,7 @@ class Matrix {
     size_t size() const;
     vector<vector<double>> matrix() const;
     vector<double> getCol(size_t) const;
+    pair<Matrix, Matrix> divide(const double ratio, bool shuffle = true, unsigned seed = 0) const;
 
     // Access operator
     vector<double>& operator[](size_t);

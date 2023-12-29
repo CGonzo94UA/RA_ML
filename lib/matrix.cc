@@ -2,6 +2,8 @@
 #include <iostream>
 #include <vector>
 #include <numeric>
+#include <random>
+#include <algorithm>
 
 using namespace std;
 
@@ -65,6 +67,32 @@ vector<double> Matrix::getCol(size_t col) const {
         result[i] = _matrix[i][col];
     }
     return result;
+}
+
+pair<Matrix, Matrix> Matrix::divide(const double ratio, bool shuffle, unsigned seed) const {
+    // Shuffle the matrix
+    vector<vector<double>> shuffled = _matrix;
+    if (shuffle) {
+        std::default_random_engine rng(seed);
+        std::shuffle(shuffled.begin(), shuffled.end(), rng);
+    }
+
+    // Divide the matrix
+    size_t const trainSize = static_cast<size_t>(shuffled.size() * ratio);
+    size_t const testSize = shuffled.size() - trainSize;
+
+    Matrix train(trainSize, _cols);
+    Matrix test(testSize, _cols);
+
+    for (size_t i = 0; i < trainSize; ++i) {
+        train[i] = shuffled[i];
+    }
+
+    for (size_t i = 0; i < testSize; ++i) {
+        test[i] = shuffled[i + trainSize];
+    }
+
+    return {train, test};
 }
 
 // ============================================
