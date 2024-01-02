@@ -27,6 +27,8 @@ class Matrix {
     vector<vector<double>> matrix() const;
     vector<double> getCol(size_t) const;
     pair<Matrix, Matrix> divide(const double ratio, bool shuffle = true, unsigned seed = 0) const;
+    vector<int> kfold(const int k, bool shuffle = true, unsigned seed = 0) const;
+    pair<Matrix, Matrix> getFold(const vector<int> &folds, const int k, const int i) const;
 
     // Access operator
     vector<double>& operator[](size_t);

@@ -5,6 +5,8 @@
 #include <fstream>
 #include <sstream>
 
+#define ITERATION_INFO 100
+
 // ============================================
 // =============== Constructor ================
 Perceptron::Perceptron(std::size_t const num_weights){
@@ -55,7 +57,7 @@ void Perceptron::train(Matrix const& X, Matrix const& Y, std::size_t const maxit
             bestAccuracy = accuracy;
             wBest = _weights;  // Copy the weights
         }
-        if (i % 10 == 0)
+        if (i % ITERATION_INFO == 0)
             std::cout << "Iteration: " << i << " Accuracy: " << accuracy << std::endl;
 
         // If there are no errors, stop training

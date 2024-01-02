@@ -95,6 +95,52 @@ pair<Matrix, Matrix> Matrix::divide(const double ratio, bool shuffle, unsigned s
     return {train, test};
 }
 
+vector<int> Matrix::kfold(const int k, bool shuffle, unsigned seed) const {
+    vector<int> indices(_rows);
+
+    for (size_t i = 0; i < _rows; ++i) {
+        indices[i] = i%k;
+    }
+
+    if (shuffle) {
+        std::default_random_engine rng(seed);
+        std::shuffle(indices.begin(), indices.begin() + _rows, rng);
+    }
+
+    return indices;
+}
+
+pair<Matrix, Matrix> Matrix::getFold(const vector<int> &folds, const int k, const int i) const {
+    size_t trainSize = 0;
+    size_t testSize = 0;
+
+    for (size_t j = 0; j < _rows; ++j) {
+        if (folds[j] == i) {
+            ++testSize;
+        } else {
+            ++trainSize;
+        }
+    }
+
+    Matrix train(trainSize, _cols);
+    Matrix test(testSize, _cols);
+
+    size_t trainIndex = 0;
+    size_t testIndex = 0;
+
+    for (size_t j = 0; j < _rows; ++j) {
+        if (folds[j] == i) {
+            test[testIndex] = _matrix[j];
+            ++testIndex;
+        } else {
+            train[trainIndex] = _matrix[j];
+            ++trainIndex;
+        }
+    }
+
+    return {train, test};
+}
+
 // ============================================
 // =============== Access op. =================
 vector<double>& Matrix::operator[](size_t i) {
