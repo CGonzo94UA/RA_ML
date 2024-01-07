@@ -46,6 +46,7 @@ class Matrix {
     Matrix operator!=(const Matrix&) const;
     Matrix& operator+=(const Matrix& R);
     // Matrix operator==(const Matrix&) const;
+    Matrix& operator/=(double);
     
     // Operations
     double sumcol(const size_t) const;

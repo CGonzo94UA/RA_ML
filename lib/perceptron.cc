@@ -87,9 +87,7 @@ void Perceptron::train(Matrix const& X, Matrix const& Y, std::size_t const maxit
         _weights += xy.transpose();
 
         //Print the weights
-        //std::cout << "Weights: " << _weights << std::endl;
-
-        
+        //std::cout << "Weights: " << _weights << std::endl; 
     }
 
     // Copy the best weights
@@ -104,6 +102,15 @@ double Perceptron::classify(const Matrix& input){
     Matrix predicted = product.apply(sign);
     //std::cout << "Predicted: " << predicted << std::endl;
     return predicted[0][0];
+}
+
+Matrix Perceptron::classify_all(const Matrix& input) const{
+    // Multiply the input matrix by the weights
+    Matrix product = input * _weights;
+    // Get the predicted output
+    Matrix predicted = product.apply(sign);
+    //std::cout << "Predicted: " << predicted << std::endl;
+    return predicted;
 }
 
 

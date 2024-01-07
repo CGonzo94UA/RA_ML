@@ -245,6 +245,15 @@ Matrix& Matrix::operator+=(const Matrix& R) {
     return *this;  // Return a reference to the modified object
 }
 
+Matrix& Matrix::operator/=(double c){
+    for (size_t i = 0; i < _rows; i++) {
+        for (size_t j = 0; j < _cols; j++){
+            _matrix[i][j] /= c;
+        }
+    }
+    return *this;  // Return a reference to the modified object
+}
+
 // ============================================
 // =============== Operations =================
 double Matrix::sumcol(const size_t col) const {
