@@ -6,9 +6,9 @@ NeuralNetworkLayer::NeuralNetworkLayer(size_t const& width_of_layer, size_t cons
 }
 
 // Activation function for the neuron
-double NeuralNetworkLayer::activationFunction(double const& x) const {
-    return 1 / (1 + exp(-x));       // Sigmoid function
-}
+// double NeuralNetworkLayer::activationFunction(double const& x) const {
+//     return 1 / (1 + exp(-x));       // Sigmoid function
+// }
 
 // Randomly initiate weights of each neuron in the layer, adding one for the bias as the first element
 vector<vector<double>> NeuralNetworkLayer::generateRandomWeights(size_t const& width_of_layer, size_t const& num_weights) const{
@@ -25,6 +25,7 @@ vector<vector<double>> NeuralNetworkLayer::generateRandomWeights(size_t const& w
         weights.push_back(neuron_weights);
     }
 
+    return weights;
 }
 
 // Applies the activation function to the dot product of the weights and the inputs
