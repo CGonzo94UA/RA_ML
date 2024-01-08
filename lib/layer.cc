@@ -2,7 +2,15 @@
 
 // Constructor for the layer, generates random weights for each neuron (except the bias, which has a value of 1)
 NeuralNetworkLayer::NeuralNetworkLayer(size_t const& width_of_layer, size_t const& num_weights) {
-    _weights = generateRandomWeights(width_of_layer, num_weights);
+    _weights = Matrix(width_of_layer, num_weights+1);       // +1 for the bias wich is the first element of each neuron in the layer and has a value of 1
+    generateRandomWeights(width_of_layer, num_weights);
+}
+
+// Constructor for the layer, generates random weights for each neuron (except the bias, which has a value of 1) and sets the activation function to the one passed as an argument
+NeuralNetworkLayer::NeuralNetworkLayer(size_t const& width_of_layer, size_t const& num_weights, double (*f)(double)) {
+    _weights = Matrix(width_of_layer, num_weights+1);       // +1 for the bias wich is the first element of each neuron in the layer and has a value of 1
+    generateRandomWeights(width_of_layer, num_weights);
+    activationFunction = f;
 }
 
 // Activation function for the neuron
@@ -11,21 +19,17 @@ NeuralNetworkLayer::NeuralNetworkLayer(size_t const& width_of_layer, size_t cons
 // }
 
 // Randomly initiate weights of each neuron in the layer, adding one for the bias as the first element
-vector<vector<double>> NeuralNetworkLayer::generateRandomWeights(size_t const& width_of_layer, size_t const& num_weights) const{
+void NeuralNetworkLayer::generateRandomWeights(size_t const& width_of_layer, size_t const& num_weights){
 
     // Randomly initiate weights of each neuron in the layer, adding one for the bias
 
-    vector<vector<double>> weights;
     for (size_t i = 0; i < width_of_layer; i++) {
-        vector<double> neuron_weights;
-        neuron_weights.push_back(1.0);      // Bias
+        _weights[0].push_back(1.0);      // Bias
         for (size_t j = 0; j < num_weights; j++) {
-            neuron_weights.push_back((double)rand() / RAND_MAX);
+            _weights[i+1].push_back((double)rand() / RAND_MAX);
         }
-        weights.push_back(neuron_weights);
     }
 
-    return weights;
 }
 
 // Applies the activation function to the dot product of the weights and the inputs
