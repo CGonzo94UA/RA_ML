@@ -4,6 +4,8 @@
 
 #include <cassert>
 
+using namespace std;
+
 // ============================================
 // =============== MLP CLASS ===============
 
@@ -73,14 +75,13 @@ MLP_Builder::~MLP_Builder() {
 
 // Add a layer to the MLP with the specified width and number of weights per neuron with the default activation function (sigmoid)
 MLP_Builder& MLP_Builder::addLayer(size_t const& width_of_layer, size_t const& num_weights) {
+    NeuralNetworkLayer* newLayer = new NeuralNetworkLayer(width_of_layer, num_weights);
+    
     if (_mlp->_inputLayer == nullptr) {
-        _mlp->_inputLayer = new NeuralNetworkLayer(width_of_layer, num_weights);
-        _mlp->_layers.push_back(_mlp->_inputLayer);
-    }
-    else {
-        _mlp->_layers.push_back(new NeuralNetworkLayer(width_of_layer, num_weights));
+        _mlp->_inputLayer = newLayer;
     }
 
+    _mlp->_layers.push_back(newLayer);
     _mlp->_outputLayer = _mlp->_layers[_mlp->_layers.size() - 1];
 
     return *this;
@@ -88,14 +89,13 @@ MLP_Builder& MLP_Builder::addLayer(size_t const& width_of_layer, size_t const& n
 
 // Add a layer to the MLP with the specified width and number of weights per neuron with the specified activation function (from functions.h)
 MLP_Builder& MLP_Builder::addLayer(size_t const& width_of_layer, size_t const& num_weights, double (*f)(double)) {
+    NeuralNetworkLayer* newLayer = new NeuralNetworkLayer(width_of_layer, num_weights, f);
+    
     if (_mlp->_inputLayer == nullptr) {
-        _mlp->_inputLayer = new NeuralNetworkLayer(width_of_layer, num_weights, f);
-        _mlp->_layers.push_back(_mlp->_inputLayer);
+        _mlp->_inputLayer = newLayer;
     }
-    else {
-        _mlp->_layers.push_back(new NeuralNetworkLayer(width_of_layer, num_weights, f));
-    }
-
+    
+    _mlp->_layers.push_back(newLayer);
     _mlp->_outputLayer = _mlp->_layers[_mlp->_layers.size() - 1];
 
     return *this;

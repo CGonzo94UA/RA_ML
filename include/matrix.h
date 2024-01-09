@@ -4,39 +4,37 @@
 #include <vector>
 #include <iostream>
 
-using namespace std;
-
 class Matrix {
-    private:
-        size_t _rows;
-        size_t _cols;
-        vector<vector<double>> _matrix;
+private:
+    std::size_t _rows;
+    std::size_t _cols;
+    std::vector<std::vector<double>> _matrix;
 
-    public:
+public:
     // Constructors
     Matrix();
-    Matrix(size_t, size_t);
-    Matrix(size_t, size_t, vector<vector<double>>);
-    Matrix(size_t, size_t, vector<double>);
+    Matrix(std::size_t, std::size_t);
+    Matrix(std::size_t, std::size_t, std::vector<std::vector<double>>);
+    Matrix(std::size_t, std::size_t, std::vector<double>);
     Matrix(const Matrix&);
 
     // Methods
-    size_t rows() const;
-    size_t cols() const;
-    size_t size() const;
-    vector<vector<double>> matrix() const;
-    vector<double> getCol(size_t) const;
-    pair<Matrix, Matrix> divide(const double ratio, bool shuffle = true, unsigned seed = 0) const;
-    vector<int> kfold(const int k, bool shuffle = true, unsigned seed = 0) const;
-    pair<Matrix, Matrix> getFold(const vector<int> &folds, const int k, const int i) const;
+    std::size_t rows() const;
+    std::size_t cols() const;
+    std::size_t size() const;
+    std::vector<std::vector<double>> matrix() const;
+    std::vector<double> getCol(std::size_t) const;
+    std::pair<Matrix, Matrix> divide(const double ratio, bool shuffle = true, unsigned seed = 0) const;
+    std::vector<int> kfold(const int k, bool shuffle = true, unsigned seed = 0) const;
+    std::pair<Matrix, Matrix> getFold(const std::vector<int> &folds, const int k, const int i) const;
 
     // Access operator
-    vector<double>& operator[](size_t);
-    const vector<double>& operator[](size_t) const;
+    std::vector<double>& operator[](std::size_t);
+    const std::vector<double>& operator[](std::size_t) const;
 
     // Modifiers
     Matrix& apply(double (*f)(double));
-    Matrix& apply(vector<double> (*f)(vector<double>));
+    Matrix& apply(std::vector<double> (*f)(std::vector<double>));
 
     // Operators
     Matrix operator+(const Matrix&) const;
@@ -48,14 +46,14 @@ class Matrix {
     // Matrix operator==(const Matrix&) const;
     
     // Operations
-    double sumcol(const size_t) const;
+    double sumcol(const std::size_t) const;
     Matrix transpose() const;
-    Matrix mult(size_t, double) const;
+    Matrix mult(std::size_t, double) const;
 
 
     // Friend functions
     friend Matrix operator*(double, const Matrix&);
-    friend ostream& operator<<(ostream&, const Matrix&);
+    friend std::ostream& operator<<(std::ostream&, const Matrix&);
     
 };
 

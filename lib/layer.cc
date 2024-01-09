@@ -1,5 +1,7 @@
 #include "layer.h"
 
+using namespace std;
+
 // Constructor for the layer, generates random weights for each neuron (except the bias, which has a value of 1)
 NeuralNetworkLayer::NeuralNetworkLayer(size_t const& width_of_layer, size_t const& num_weights) {
     _weights = Matrix(width_of_layer, num_weights+1);       // +1 for the bias wich is the first element of each neuron in the layer and has a value of 1

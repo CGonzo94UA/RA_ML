@@ -9,24 +9,22 @@ class MLP;
 class MLP_Builder;
 class MLP_Display;
 
-using namespace std;
-
 class MLP{
     public:
         ~MLP();
 
-        void setInputs(const vector<double>& inputs);
-        vector<double> getOutputs() const;
-        vector<double> getInputs() const;
+        void setInputs(const std::vector<double>& inputs);
+        std::vector<double> getOutputs() const;
+        std::vector<double> getInputs() const;
 
     private:
 
         MLP();
 
-        vector<NeuralNetworkLayer*> _layers;
+        std::vector<NeuralNetworkLayer*> _layers;
         NeuralNetworkLayer* _inputLayer;
         NeuralNetworkLayer* _outputLayer;
-        vector<double> _inputs;
+        std::vector<double> _inputs;
 
 
         friend class MLP_Builder;
@@ -39,8 +37,8 @@ class MLP_Builder{
         MLP_Builder();
         ~MLP_Builder();
 
-        MLP_Builder& addLayer(size_t const& width_of_layer, size_t const& num_weights);
-        MLP_Builder& addLayer(size_t const& width_of_layer, size_t const& num_weights, double (*f)(double));
+        MLP_Builder& addLayer(std::size_t const& width_of_layer, std::size_t const& num_weights);
+        MLP_Builder& addLayer(std::size_t const& width_of_layer, std::size_t const& num_weights, double (*f)(double));
         MLP_Builder& setActivationFunc(double (*f)(double));
 
         MLP* build();
