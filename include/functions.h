@@ -1,25 +1,30 @@
+#ifndef __FUNCTIONS_H__
+#define __FUNCTIONS_H__
+
 #include <cmath>
 #include <algorithm>
 
 namespace ActivationFunctions{
     // Sigmoid
-    double sigmoid(double x) {
+    inline double sigmoid(double x) {
         return 1 / (1 + exp(-x));
     }
 
     // Derivative of sigmoid
-    double sigmoid_prime(double x) {
+    inline double sigmoid_prime(double x) {
         return sigmoid(x) * (1 - sigmoid(x));
     }
 
     // ReLU
-    double relu(double x) {
+    inline double relu(double x) {
         return std::max(0.0, x);
     }
 
     // Derivative of ReLU
-    double relu_prime(double x) {
+    inline double relu_prime(double x) {
         return x > 0 ? 1 : 0;
     }
 
 }
+
+#endif
