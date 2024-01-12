@@ -13,9 +13,10 @@ class MLP{
     public:
         ~MLP();
 
-        void setInputs(const std::vector<double>& inputs);
-        std::vector<double> getOutputs() const;
-        std::vector<double> getInputs() const;
+        void setInputs(const vector<double>& inputs);
+        vector<double> getOutputs() const;
+        vector<double> getInputs() const;
+        void train(const Matrix& trainingData, const Matrix& targetData, size_t epochs, double learningRate);
 
     private:
 
@@ -24,7 +25,9 @@ class MLP{
         std::vector<NeuralNetworkLayer*> _layers;
         NeuralNetworkLayer* _inputLayer;
         NeuralNetworkLayer* _outputLayer;
-        std::vector<double> _inputs;
+        vector<double> _inputs;
+        void updateWeights(double learningRate);
+        void backpropagate(const vector<double>& output, const vector<double>& target);
 
 
         friend class MLP_Builder;

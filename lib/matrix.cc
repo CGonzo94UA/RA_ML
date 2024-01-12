@@ -69,6 +69,14 @@ vector<double> Matrix::getCol(size_t col) const {
     return result;
 }
 
+vector<double> Matrix::getRow(size_t row) const {
+    vector<double> result(_cols);
+    for (size_t i = 0; i < _cols; i++) {
+        result[i] = _matrix[row][i];
+    }
+    return result;
+}
+
 pair<Matrix, Matrix> Matrix::divide(const double ratio, bool shuffle, unsigned seed) const {
     // Shuffle the matrix
     vector<vector<double>> shuffled = _matrix;

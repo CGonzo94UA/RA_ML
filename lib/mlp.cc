@@ -1,6 +1,6 @@
-#include "mlp.h"
-#include "layer.h"
-#include "functions.h"
+#include "../include/mlp.h"
+#include "../include/layer.h"
+#include "../include/functions.h"
 
 #include <cassert>
 
@@ -40,11 +40,12 @@ void MLP::setInputs(const vector<double>& inputs) {
 }
 
 vector<double> MLP::getOutputs() const {
-    
+    _inputLayer->setInputs(_inputs);
     vector<double> outputs = _inputLayer->feedForward(_inputs);
 
     // Send the outputs of each layer to the next layer
     for (size_t i = 0; i < _layers.size(); i++) {
+        _layers[i]->setInputs(outputs);
         outputs = _layers[i]->feedForward(outputs);
     }
 
@@ -54,6 +55,56 @@ vector<double> MLP::getOutputs() const {
 
 vector<double> MLP::getInputs() const {
     return _inputs;
+}
+
+void MLP::train(const Matrix& trainingData, const Matrix& targetData, size_t epochs, double learningRate) {
+    vector<double> output;
+    vector<double> target;
+    // Verifica si las capas están correctamente configuradas
+    assert(_inputLayer != nullptr && "La MLP debe tener una capa de entrada o hubo un error durante la construcción");
+    assert(_outputLayer != nullptr && "La MLP debe tener una capa de salida o hubo un error durante la construcción");
+    assert(_layers.size() > 1 && "La MLP debe tener al menos una capa oculta o hubo un error durante la construcción");
+
+    for (size_t epoch = 0; epoch < epochs; ++epoch) {
+        for (size_t i = 0; i < trainingData.rows(); ++i) {
+            // Establece las entradas
+            setInputs(trainingData.getRow(i));  //CAMBIAR POR UN METODO PARA SACAR LOS DATOS
+            
+            // Realiza el pase hacia adelante (feedforward)
+            output = getOutputs();
+
+            target = targetData.getRow(i);
+
+            // Realiza el pase hacia atrás (backpropagation) y actualiza los pesos
+            backpropagate(output, target);
+            updateWeights(learningRate);
+        }
+    }
+}
+
+void MLP::updateWeights(double learningRate) {
+    // Actualiza los pesos de las capas ocultas y de salida utilizando el descenso de gradiente
+
+    // Comienza por la última capa
+    _outputLayer->updateWeights(learningRate);
+
+    // Luego, actualiza las capas ocultas en orden inverso
+    for (int i = _layers.size() - 2; i >= 0; --i) {
+        _layers[i]->updateWeights(learningRate);
+    }
+}
+
+void MLP::backpropagate(const vector<double>& output, const vector<double>& target) {
+    vector<double> gradients;
+    // Realiza el paso hacia atrás (backpropagation) para calcular los gradientes
+
+    // Comienza por la última capa
+    gradients = _outputLayer->calculateGradients(output, target);
+
+    // Luego, calcula los gradientes de las capas ocultas en orden inverso
+    for (int i = _layers.size() - 2; i >= 0; --i) {
+        gradients = _layers[i]->calculateGradientsMedio(gradients, _layers[i+1]->getInputs());
+    }
 }
 
 // =================================================

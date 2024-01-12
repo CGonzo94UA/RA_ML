@@ -24,6 +24,7 @@ public:
     std::size_t size() const;
     std::vector<std::vector<double>> matrix() const;
     std::vector<double> getCol(std::size_t) const;
+    std::vector<double> getRow(std::size_t) const;
     std::pair<Matrix, Matrix> divide(const double ratio, bool shuffle = true, unsigned seed = 0) const;
     std::vector<int> kfold(const int k, bool shuffle = true, unsigned seed = 0) const;
     std::pair<Matrix, Matrix> getFold(const std::vector<int> &folds, const int k, const int i) const;
