@@ -1,7 +1,5 @@
 #include "matrix.h"
 #include "perceptron.h"
-#include "mlp.h"
-#include "layer.h"
 #include <iostream>
 #include <vector>
 #include <sstream>
@@ -24,28 +22,16 @@ std::string printVector(std::vector<T> const& v) {
 
 int main(){
     auto [X, Y] = Perceptron::readFromCSV("datasets/128entradas.csv");
-    int maxiter = 1001;
-
-    // Creates a MLP with 3 layers, the first one with 128 neurons, the second one with 64 neurons and the last one with 1 neuron
-    MLP_Builder builder = MLP_Builder();
-    builder.addLayer(128, 128);         // First layer
-    builder.addLayer(64, 64);           // Second layer
-    builder.addLayer(1, 1);             // Third layer (output layer)
-
-    MLP* mlp = builder.build();
-
+    int maxiter = 1000;
 
     #ifdef DIVIDE_DATASET
         double trainRatio = 0.8;
         auto [Xtrain, Xtest] = X.divide(trainRatio);
         auto [Ytrain, Ytest] = Y.divide(trainRatio);
-
         Perceptron perceptron(Xtrain.cols());
-
         // std::cout << "Initial weights: " << perceptron.weights() << "\n";
         
         perceptron.train(Xtrain, Ytrain, maxiter);
-
         // std::cout <<  "Final weigths: " << printVector(perceptron.weights().getCol(0)) << "\n";
         std::cout << "Accuracy: " << perceptron.test(Xtest, Ytest) << "\n";
     #else
@@ -57,9 +43,10 @@ int main(){
                 auto [Xtrain, Xtest] = X.getFold(folds, KFOLDS, i);
                 auto [Ytrain, Ytest] = Y.getFold(folds, KFOLDS, i);
 
-                mlp->train(Xtrain, Ytrain, maxiter, 0.1);
-
-                double accuracy = mlp->test(Xtest, Ytest);
+                Perceptron perceptron(Xtrain.cols());
+                perceptron.train(Xtrain, Ytrain, maxiter);
+                
+                double accuracy = perceptron.test(Xtest, Ytest);
                 std::cout << "++Accuracy fold " << i << ": " << accuracy << "\n\n";
                 max_accuracy = max(max_accuracy, accuracy);
             }
@@ -72,6 +59,5 @@ int main(){
     #endif
     // Matrix test(1, 3, {1, 1, 1});
     // std::cout << "Classify: " << perceptron.classify(test) << "\n";
-
     return 0;
 }

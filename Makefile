@@ -10,8 +10,16 @@ INC_DIR := ./include
 LIB_DIR := ./lib
 BUILD_DIR := ./build
 
+# get main file name as argument
+ifeq ($(strip $(MAIN)),)
+	MAIN := main
+endif
+
+# para darle otro nombre a main, ejecutar:
+# make MAIN=main2
+
 # Archivos fuente
-SRCS := $(wildcard $(SRC_DIR)/*.cc $(LIB_DIR)/*.cc)
+SRCS := $(wildcard $(SRC_DIR)/$(MAIN).cc $(LIB_DIR)/*.cc)
 
 # Objetos generados
 OBJS := $(patsubst $(SRC_DIR)/%.cc,$(BUILD_DIR)/%.o,$(SRCS))

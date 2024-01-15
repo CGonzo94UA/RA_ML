@@ -248,7 +248,7 @@ MLP* MLP_Builder::build(string filename) {
 
     // Creates the MLP
     MLP* mlp = new MLP();
-    vector<vector<double>> weights;
+    vector<vector<double>> weights_v;
     size_t contador = 0;
     //reads the file, line by line. Each line is a different layer neuron and each layer is separated by "==="
 
@@ -262,7 +262,7 @@ MLP* MLP_Builder::build(string filename) {
         if (line == "===") {
             
             // Creates a Matrix with the weights
-            Matrix weights(weights.size(), weights[0].size(), weights);
+            Matrix weights(weights_v.size(), weights_v[0].size(), weights_v);
 
             // Adds the weights to the layer
             mlp->_layers.push_back(new NeuralNetworkLayer(weights.rows(), weights.cols()));
@@ -291,11 +291,16 @@ MLP* MLP_Builder::build(string filename) {
 
         // Converts the tokens to doubles and adds them to the weights vector
         for (size_t i = 0; i < tokens.size(); i++) {
-            weights[contador].push_back(stod(tokens[i]));
+            weights_v[contador].push_back(stod(tokens[i]));
         }
 
 
     }
+
+    // Closes the file
+    file.close();
+
+    return mlp;
 
 }
 
