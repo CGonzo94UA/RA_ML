@@ -1,6 +1,7 @@
-#include "../include/mlp.h"
-#include "../include/layer.h"
-#include "../include/functions.h"
+#include "mlp.h"
+#include "layer.h"
+#include "functions.h"
+#include "environment.h"
 
 #include <cassert>
 #include <fstream>
@@ -73,7 +74,13 @@ void MLP::train(const Matrix& trainingData, const Matrix& targetData, size_t epo
     assert(_outputLayer != nullptr && "La MLP debe tener una capa de salida o hubo un error durante la construcción");
     assert(_layers.size() > 1 && "La MLP debe tener al menos una capa oculta o hubo un error durante la construcción");
 
+    #if DEBUG == 1
+        cout << "Training for " << epochs << " epochs" << endl;
+    #endif
     for (size_t epoch = 0; epoch < epochs; ++epoch) {
+        #if DEBUG == 1
+            cout << "Training for Epoch: " << epoch << "/" << epochs << endl;
+        #endif
         //cout << "Training for Epoch: " << epoch << "/" << epochs << endl;
         for (size_t i = 0; i < trainingData.rows(); ++i) {
             // Establece las entradas
@@ -114,7 +121,7 @@ double MLP::test(const Matrix& testData, const Matrix& targetData) {
         output[i] = getOutputs();
     }
 
-    Matrix predicted = output.apply(ActivationFunctions::sign);
+    Matrix predicted = output.apply(ActivationFunctions::binary);
     double numErrors = (predicted != targetData).sumcol(0);
     accuracy = 1.0 - (numErrors / static_cast<double>(targetData.rows()));
 
@@ -318,7 +325,7 @@ void MLP_Display::display(MLP const& mlp) {
     cout << "Weights: " << endl;
     cout << mlp._inputLayer->weights() << endl;
 
-    for (size_t i = 0; i < mlp._layers.size(); i++) {
+    for (size_t i = 1; i < mlp._layers.size()-1; i++) {
         cout << "Hidden layer " << i+1 << ": " << endl;
         cout << "Weights of neurons (each line is a different neuron): " << endl;
         cout << mlp._layers[i]->weights() << endl;

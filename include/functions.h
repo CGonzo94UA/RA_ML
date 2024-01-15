@@ -26,11 +26,15 @@ namespace ActivationFunctions{
     }
 
     inline double sign(double x){
-    if (x >= 0)
-        return 1.0;
-    else
-        return -1.0;
-}
+        if (x >= 0)
+            return 1.0;
+        else
+            return -1.0;
+    }
+
+    inline double binary(double x) {
+        return x < 0.5 ? -1.0 : 1.0;
+    }
 
 }
 

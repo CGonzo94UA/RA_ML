@@ -99,7 +99,7 @@ vector<double> NeuralNetworkLayer::calculateGradientsMedio(const vector<double>&
     // Calcula la derivada de la función de activación en las entradas de esta capa
     vector<double> activationDerivative;
     for (size_t i = 0; i < outputs.size(); ++i) {
-        activationDerivative.push_back(activationFunctionDerivative(outputs[i]));
+        activationDerivative.push_back(ActivationFunctions::sigmoid_prime(outputs[i]));
     }
 
     // Calcula los gradientes multiplicando los gradientes de la capa siguiente por la derivada de la activación
@@ -113,12 +113,6 @@ vector<double> NeuralNetworkLayer::calculateGradientsMedio(const vector<double>&
     }
 
     return _gradients;
-}
-
-double NeuralNetworkLayer::activationFunctionDerivative(double x) {
-    // Derivada de la función sigmoide
-    double sigmoid = 1.0 / (1.0 + exp(-x));
-    return sigmoid * (1.0 - sigmoid);
 }
 
 void NeuralNetworkLayer::updateWeights(double learningRate) {
