@@ -6,6 +6,7 @@
 #include <cmath>
 #include "functions.h"
 #include "matrix.h"
+#include <random>
 
 class NeuralNetworkLayer{
     private:

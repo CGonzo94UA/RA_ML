@@ -27,10 +27,14 @@ void NeuralNetworkLayer::generateRandomWeights(size_t const& width_of_layer, siz
 
     // Randomly initiate weights of each neuron in the layer, adding one for the bias
 
+    std::random_device seed;
+	std::default_random_engine generator(seed());
+	std::uniform_real_distribution<double> distributionDouble(-.5, .5);
+
     for (size_t i = 0; i < width_of_layer; i++) {
         _weights[0].push_back(1.0);      // Bias
         for (size_t j = 0; j < num_weights; j++) {
-            _weights[i+1].push_back((double)rand() / RAND_MAX);
+            _weights[i+1].push_back(distributionDouble(generator));
         }
     }
 
