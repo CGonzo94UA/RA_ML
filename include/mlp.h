@@ -4,6 +4,10 @@
 #include "matrix.h"
 #include "layer.h"
 #include "functions.h"
+#include <vector>
+#include <iostream>
+
+using namespace std;
 
 class MLP;
 class MLP_Builder;
@@ -17,6 +21,7 @@ class MLP{
         vector<double> getOutputs() const;
         vector<double> getInputs() const;
         void train(const Matrix& trainingData, const Matrix& targetData, size_t epochs, double learningRate);
+        double test(const Matrix& testData, const Matrix& targetData);
 
     private:
 
@@ -28,7 +33,7 @@ class MLP{
         vector<double> _inputs;
         void updateWeights(double learningRate);
         void backpropagate(const vector<double>& output, const vector<double>& target);
-
+        void saveWeights();
 
         friend class MLP_Builder;
         friend class MLP_Display;
@@ -45,6 +50,7 @@ class MLP_Builder{
         MLP_Builder& setActivationFunc(double (*f)(double));
 
         MLP* build();
+        MLP* build(string filename);
 
     private:
         MLP* _mlp;

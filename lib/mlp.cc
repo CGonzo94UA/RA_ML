@@ -3,6 +3,8 @@
 #include "../include/functions.h"
 
 #include <cassert>
+#include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -32,7 +34,8 @@ MLP::~MLP() {
 // ================= Methods ==================
 
 void MLP::setInputs(const vector<double>& inputs) {
-    if (inputs.size() != _inputLayer->weights()[0].size() - 1) {
+    //cout << "Inputs: " << inputs.size() << " Esperados: " << _inputLayer->weights()[0].size()-1 << endl;
+    if (inputs.size() != _inputLayer->weights()[0].size()) {
         throw invalid_argument("Number of inputs does not match the number of neurons in the input layer");
     }
 
@@ -40,7 +43,12 @@ void MLP::setInputs(const vector<double>& inputs) {
 }
 
 vector<double> MLP::getOutputs() const {
+    
+    //Checks if _inputLayer is null and if _inputs is also null
+    assert(_inputLayer != nullptr && "The MLP must have an input layer or there was an error while building");
+
     _inputLayer->setInputs(_inputs);
+    
     vector<double> outputs = _inputLayer->feedForward(_inputs);
 
     // Send the outputs of each layer to the next layer
@@ -66,8 +74,14 @@ void MLP::train(const Matrix& trainingData, const Matrix& targetData, size_t epo
     assert(_layers.size() > 1 && "La MLP debe tener al menos una capa oculta o hubo un error durante la construcción");
 
     for (size_t epoch = 0; epoch < epochs; ++epoch) {
+        //cout << "Training for Epoch: " << epoch << "/" << epochs << endl;
         for (size_t i = 0; i < trainingData.rows(); ++i) {
             // Establece las entradas
+
+            //Removes the last element of the row (the class)
+            //vector<double> training_row = trainingData.getRow(i);
+            //training_row.pop_back();
+
             setInputs(trainingData.getRow(i));  //CAMBIAR POR UN METODO PARA SACAR LOS DATOS
             
             // Realiza el pase hacia adelante (feedforward)
@@ -75,11 +89,36 @@ void MLP::train(const Matrix& trainingData, const Matrix& targetData, size_t epo
 
             target = targetData.getRow(i);
 
-            // Realiza el pase hacia atrás (backpropagation) y actualiza los pesos
+            //Realiza el pase hacia atrás (backpropagation) y actualiza los pesos
             backpropagate(output, target);
             updateWeights(learningRate);
         }
     }
+}
+
+
+double MLP::test(const Matrix& testData, const Matrix& targetData) {
+    Matrix output(testData.rows(), 1);
+    double accuracy = 0.0;
+
+    // Verifica si las capas están correctamente configuradas
+    assert(_inputLayer != nullptr && "La MLP debe tener una capa de entrada o hubo un error durante la construcción");
+    assert(_outputLayer != nullptr && "La MLP debe tener una capa de salida o hubo un error durante la construcción");
+    assert(_layers.size() > 1 && "La MLP debe tener al menos una capa oculta o hubo un error durante la construcción");
+
+    for (size_t i = 0; i < testData.rows(); ++i) {
+        // Establece las entradas
+        setInputs(testData.getRow(i));
+
+        // Realiza el pase hacia adelante (feedforward)
+        output[i] = getOutputs();
+    }
+
+    Matrix predicted = output.apply(ActivationFunctions::sign);
+    double numErrors = (predicted != targetData).sumcol(0);
+    accuracy = 1.0 - (numErrors / static_cast<double>(targetData.rows()));
+
+    return accuracy / static_cast<double>(testData.rows());
 }
 
 void MLP::updateWeights(double learningRate) {
@@ -100,11 +139,35 @@ void MLP::backpropagate(const vector<double>& output, const vector<double>& targ
 
     // Comienza por la última capa
     gradients = _outputLayer->calculateGradients(output, target);
-
+    //cout << "layers: " << _layers.size() << "layers -2: " << _layers.size()-2 << endl;
     // Luego, calcula los gradientes de las capas ocultas en orden inverso
     for (int i = _layers.size() - 2; i >= 0; --i) {
         gradients = _layers[i]->calculateGradientsMedio(gradients, _layers[i+1]->getInputs());
     }
+}
+
+#include <fstream>
+
+void MLP::saveWeights() {
+    // Guarda los pesos de la red en un archivo
+    // TODO
+
+    // Creates the file
+    std::ofstream file;
+    file.open("weights.txt");
+
+
+    // Writes the weights of the hidden layers line by line
+    for (size_t i = 0; i < _layers.size(); i++) {
+        for (size_t j = 0; j < _layers[i]->weights().rows(); j++) {
+            for (size_t k = 0; k < _layers[i]->weights()[j].size(); k++) {
+                file << _layers[i]->weights()[j][k] << "-";
+            }
+            file << endl;
+        }
+        file << "===" << endl;
+    }
+
 }
 
 // =================================================
@@ -118,7 +181,7 @@ MLP_Builder::MLP_Builder() {
 }
 
 MLP_Builder::~MLP_Builder() {
-    delete _mlp;
+    //delete _mlp;
 }
 
 // =================================================
@@ -172,14 +235,71 @@ MLP* MLP_Builder::build() {
     //IF size == 1, then there is only the input layer and the output layer
     assert(_mlp->_layers.size() > 1 && "The MLP must has at least one hidden layer or there was an error while building");    // If the MLP has no layers, throw an error message
 
-    MLP* mlp = new MLP();
-
-    mlp->_inputLayer = _mlp->_inputLayer;
-    mlp->_outputLayer = _mlp->_outputLayer;
-    mlp->_layers = _mlp->_layers;
+    MLP* mlp = _mlp;
+    _mlp = nullptr;
 
     return mlp;
 }
+
+//TODO: CHECK IF THIS WORKS ALONG WITH THE MLP::SAVEWEIGHTS() METHOD
+MLP* MLP_Builder::build(string filename) {
+    
+    // Creates the MLP From a file
+
+    // Creates the MLP
+    MLP* mlp = new MLP();
+    vector<vector<double>> weights;
+    size_t contador = 0;
+    //reads the file, line by line. Each line is a different layer neuron and each layer is separated by "==="
+
+    // Opens the file
+    ifstream file(filename);
+    string line;
+
+    // Reads the file line by line
+    while (getline(file, line)) {
+        // Checks if the line is a separator
+        if (line == "===") {
+            
+            // Creates a Matrix with the weights
+            Matrix weights(weights.size(), weights[0].size(), weights);
+
+            // Adds the weights to the layer
+            mlp->_layers.push_back(new NeuralNetworkLayer(weights.rows(), weights.cols()));
+            mlp->_layers[mlp->_layers.size() - 1]->setWeights(weights);
+
+            // Adds the layer to the MLP
+            if (mlp->_inputLayer == nullptr) {
+                mlp->_inputLayer = mlp->_layers[0];
+            }
+
+            mlp->_outputLayer = mlp->_layers[mlp->_layers.size() - 1];
+            continue;
+
+        }
+
+        // Creates a new layer
+        NeuralNetworkLayer* newLayer = new NeuralNetworkLayer(0, 0);
+
+        // Splits the line by the "-" separator
+        vector<string> tokens;
+        stringstream ss(line);
+        string token;
+        while (getline(ss, token, '-')) {
+            tokens.push_back(token);
+        }
+
+        // Converts the tokens to doubles and adds them to the weights vector
+        for (size_t i = 0; i < tokens.size(); i++) {
+            weights[contador].push_back(stod(tokens[i]));
+        }
+
+
+    }
+
+}
+
+
 
 // =================================================
 // =============== MLP_DISPLAY CLASS ===============

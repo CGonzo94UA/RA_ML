@@ -7,6 +7,9 @@
 #include "functions.h"
 #include "matrix.h"
 #include <random>
+#include <cassert>
+
+using namespace std;
 
 class NeuralNetworkLayer{
     private:
@@ -29,6 +32,7 @@ class NeuralNetworkLayer{
         double activationFunctionDerivative(double x);
         void updateWeights(double learningRate);
         void setInputs(const vector<double>& inputs);
+        void setWeights(const Matrix& weights) { _weights = weights; }
 
         void generateRandomWeights(std::size_t const& width_of_layer, std::size_t const& num_weights);
         std::vector<double> feedForward(std::vector<double> const& inputs) const;

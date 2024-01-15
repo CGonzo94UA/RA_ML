@@ -31,10 +31,14 @@ void NeuralNetworkLayer::generateRandomWeights(size_t const& width_of_layer, siz
 	std::default_random_engine generator(seed());
 	std::uniform_real_distribution<double> distributionDouble(-.5, .5);
 
+    // For each neuron in the layer (width_of_layer) generate num_weights+1 random weights (num_weights + 1 for the bias) where the bias is the first element of each neuron and has a value of 1
     for (size_t i = 0; i < width_of_layer; i++) {
-        _weights[0].push_back(1.0);      // Bias
-        for (size_t j = 0; j < num_weights; j++) {
-            _weights[i+1].push_back(distributionDouble(generator));
+        for (size_t j = 0; j < num_weights+1; j++) {
+            if (j == 0) {
+                _weights[i][j] = 1.0;
+            } else {
+                _weights[i][j] = distributionDouble(generator);
+            }
         }
     }
 
@@ -42,14 +46,21 @@ void NeuralNetworkLayer::generateRandomWeights(size_t const& width_of_layer, siz
 
 // Applies the activation function to the dot product of the weights and the inputs
 vector<double> NeuralNetworkLayer::feedForward(vector<double> const& inputs) const {
+
+    //Checks if there is an activation function
+    assert(activationFunction != nullptr && "The layer must have an activation function or there was an error while building");
+    //cout << "Inputs: " << inputs.size() << " Esperados: " << _weights.rows() << endl;
     vector<double> outputs;
-    for (size_t i = 0; i < _weights.size(); i++) {
+    for (size_t i = 0; i < _weights.rows(); i++) {
         double output = 0;
         for (size_t j = 0; j < _weights[i].size(); j++) {
             output += _weights[i][j] * inputs[j];
         }
+        
         outputs.push_back(activationFunction(output));
+        
     }
+
     return outputs;
 }
 
@@ -114,7 +125,7 @@ void NeuralNetworkLayer::updateWeights(double learningRate) {
     // Asumiendo que '_gradients' contiene los gradientes calculados en la retropropagación
 
     // Actualizar los pesos de las conexiones entre esta capa y la capa siguiente (forward pass)
-    for (size_t i = 0; i < _weights.size(); ++i) {
+    for (size_t i = 0; i < _weights.rows(); ++i) {
         for (size_t j = 0; j < _weights[i].size(); ++j) {
             // Actualizar cada peso usando el descenso de gradiente
             _weights[i][j] -= learningRate * _gradients[i] * _inputs[j];
