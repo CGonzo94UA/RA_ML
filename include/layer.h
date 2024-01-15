@@ -35,7 +35,7 @@ class NeuralNetworkLayer{
         void setWeights(const Matrix& weights) { _weights = weights; }
 
         void generateRandomWeights(std::size_t const& width_of_layer, std::size_t const& num_weights);
-        std::vector<double> feedForward(std::vector<double> const& inputs) const;
+        std::vector<double> feedForward() const;
 
         void setActivationFunc(double (*f)(double)) { activationFunction = f; }
 };

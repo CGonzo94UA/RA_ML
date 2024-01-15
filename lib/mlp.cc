@@ -50,12 +50,12 @@ vector<double> MLP::getOutputs() const {
 
     _inputLayer->setInputs(_inputs);
     
-    vector<double> outputs = _inputLayer->feedForward(_inputs);
+    vector<double> outputs = _inputLayer->feedForward();
 
     // Send the outputs of each layer to the next layer
-    for (size_t i = 0; i < _layers.size(); i++) {
+    for (size_t i = 1; i < _layers.size(); i++) {
         _layers[i]->setInputs(outputs);
-        outputs = _layers[i]->feedForward(outputs);
+        outputs = _layers[i]->feedForward();
     }
 
     return outputs;

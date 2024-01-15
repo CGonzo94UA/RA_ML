@@ -45,7 +45,7 @@ void NeuralNetworkLayer::generateRandomWeights(size_t const& width_of_layer, siz
 }
 
 // Applies the activation function to the dot product of the weights and the inputs
-vector<double> NeuralNetworkLayer::feedForward(vector<double> const& inputs) const {
+vector<double> NeuralNetworkLayer::feedForward() const {
 
     //Checks if there is an activation function
     assert(activationFunction != nullptr && "The layer must have an activation function or there was an error while building");
@@ -54,7 +54,7 @@ vector<double> NeuralNetworkLayer::feedForward(vector<double> const& inputs) con
     for (size_t i = 0; i < _weights.rows(); i++) {
         double output = 0;
         for (size_t j = 0; j < _weights[i].size(); j++) {
-            output += _weights[i][j] * inputs[j];
+            output += _weights[i][j] * _inputs[j];
         }
         
         outputs.push_back(activationFunction(output));
