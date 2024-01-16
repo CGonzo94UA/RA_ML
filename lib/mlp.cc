@@ -106,7 +106,6 @@ void MLP::train(const Matrix& trainingData, const Matrix& targetData, size_t epo
 
 double MLP::test(const Matrix& testData, const Matrix& targetData) {
     Matrix output(testData.rows(), 1);
-    double accuracy = 0.0;
 
     // Verifica si las capas están correctamente configuradas
     assert(_inputLayer != nullptr && "La MLP debe tener una capa de entrada o hubo un error durante la construcción");
@@ -121,11 +120,17 @@ double MLP::test(const Matrix& testData, const Matrix& targetData) {
         output[i] = getOutputs();
     }
 
+    #if DEBUG == 2
+        cout << "Output: " << endl;
+        cout << output << endl;
+        cout << "Target: " << endl;
+        cout << targetData << endl;
+    #endif
+
     Matrix predicted = output.apply(ActivationFunctions::binary);
     double numErrors = (predicted != targetData).sumcol(0);
-    accuracy = 1.0 - (numErrors / static_cast<double>(targetData.rows()));
-
-    return accuracy / static_cast<double>(testData.rows());
+    return 1.0 - (numErrors / static_cast<double>(targetData.rows()));
+    
 }
 
 void MLP::updateWeights(double learningRate) {
