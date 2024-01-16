@@ -285,9 +285,6 @@ MLP* MLP_Builder::build(string filename) {
 
         }
 
-        // Creates a new layer
-        NeuralNetworkLayer* newLayer = new NeuralNetworkLayer(0, 0);
-
         // Splits the line by the "-" separator
         vector<string> tokens;
         stringstream ss(line);
