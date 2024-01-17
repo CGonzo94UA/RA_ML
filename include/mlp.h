@@ -26,6 +26,9 @@ class MLP{
         void setWeights(const vector<Matrix>& weights);
         int getPuntuacion() const;
 
+        // clone
+        MLP* clone() const;
+
     private:
 
         MLP();

@@ -1,4 +1,5 @@
 #include "layer.h"
+#include "randonn_generator.h"
 
 using namespace std;
 
@@ -26,10 +27,7 @@ NeuralNetworkLayer::NeuralNetworkLayer(size_t const& width_of_layer, size_t cons
 void NeuralNetworkLayer::generateRandomWeights(size_t const& width_of_layer, size_t const& num_weights){
 
     // Randomly initiate weights of each neuron in the layer, adding one for the bias
-
-    std::random_device seed;
-	std::default_random_engine generator(seed());
-	std::uniform_real_distribution<double> distributionDouble(-.5, .5);
+    Randonn_generator generator;
 
     // For each neuron in the layer (width_of_layer) generate num_weights+1 random weights (num_weights + 1 for the bias) where the bias is the first element of each neuron and has a value of 1
     for (size_t i = 0; i < width_of_layer; i++) {
@@ -37,7 +35,7 @@ void NeuralNetworkLayer::generateRandomWeights(size_t const& width_of_layer, siz
             if (j == 0) {
                 _weights[i][j] = 1.0;
             } else {
-                _weights[i][j] = distributionDouble(generator);
+                _weights[i][j] = generator.randomDouble(-0.5, 0.5);
             }
         }
     }

@@ -24,20 +24,32 @@ int main(){
     genetic->initialize();
 
     // imprime la generacion actual
-    std::cout << genetic->getGeneration() << "\n";
+    // std::cout << genetic->getGeneration() << "\n";
+    // std::cout << genetic->getIndividuals().size() << "\n";
 
     // evoluciona el algoritmo genetico
-    genetic->evolve();
+    for (int i = 0; i < 50; i++) {
+        genetic->evolve();
+        // imprime la generacion actual
+        std::cout << "Generation: " << genetic->getGeneration() << "\n";
 
-    // imprime la generacion actual
-    std::cout << genetic->getGeneration() << "\n";
+        // imprime los individuos de la generacion actual
+        std::vector<Individual*> individuals = genetic->getIndividuals();
+        // std::cout << individuals.size() << "\n";
 
-    // imprime los individuos de la generacion actual
-    std::vector<Individual*> individuals = genetic->getIndividuals();
+        std::cout << "Fitness: " << "\n";
+        for (int i = 0; i < 5; i++) {
+            // std::cout << "Individual " << i << " fitness: " << std::endl;
+            // std::cout << individuals[i]->getFitness() << "\n";
+            std::cout << i << ": " << individuals[i]->getFitness() << "\n";
+        }
 
-    for (int i = 0; i < individuals.size(); i++) {
-        std::cout << individuals[i]->getFitness() << "\n";
+        std::cout << "=======================================" << "\n";
     }
+
+
+
+    delete genetic;
 
     return 0;
 }

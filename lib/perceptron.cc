@@ -1,4 +1,5 @@
 #include "perceptron.h"
+#include "randonn_generator.h"
 #include <vector>
 #include <random>
 #include <algorithm>
@@ -22,22 +23,19 @@ double sign(double x){
 }
 
 Matrix Perceptron::generateRandomWeights(std::size_t const num_weights){
-    std::random_device seed;
-	std::default_random_engine generator(seed());
-	std::uniform_real_distribution<double> distributionDouble(-.5, .5);
+    Randonn_generator generator;
     Matrix weights(num_weights, 1);
 
 	for (int i = 1; i < weights.size(); i++) {
-		weights[i][0] = distributionDouble(generator);
+		weights[i][0] = generator.randomDouble(-0.5, 0.5);
 	}
 
     return weights;
 }
 
 void Perceptron::train(Matrix const& X, Matrix const& Y, std::size_t const maxiter){
-    
-    std::default_random_engine generator;
-    std::uniform_int_distribution<int> distribution(0,X.rows()-1);
+    Randonn_generator generator;
+
     Matrix wBest(_weights.rows(), _weights.cols(), _weights.matrix());
     double bestAccuracy = 0.0;
 
@@ -71,11 +69,11 @@ void Perceptron::train(Matrix const& X, Matrix const& Y, std::size_t const maxit
         //The update rule is w(t + 1) = w(t) + y(t)x(t) . 
 
         // Pick a random example
-        size_t index = distribution(generator);
+        size_t index = generator.randomInt(0, X.rows() - 1);
 
         while (errors[index][0] != 1.0)
         {
-            index = distribution(generator);
+            index = generator.randomInt(0, X.rows() - 1);
         }
         //std::cout << "Index: " << index << std::endl;
         //std::cout << "Weights: " << _weights << std::endl;

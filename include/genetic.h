@@ -1,8 +1,9 @@
 #ifndef __GENETIC_H__
 #define __GENETIC_H__
 
-#include <vector>
 #include "individual.h"
+#include "randonn_generator.h"
+#include <vector>
 #include <functional>
 
 class Genetic
@@ -17,6 +18,8 @@ public:
     int getGeneration() { return generation; }
 
 private:
+    Randonn_generator generator;
+
     std::function<Individual*()> createRandomIndividual;
     int population;
     std::vector<Individual*> individuals;

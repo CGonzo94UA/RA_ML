@@ -8,10 +8,7 @@ Individual::Individual()
     this->mlp = NULL;
     this->fitness = 0;
 
-    // std::random_device seed;
-    // this->generator = std::default_random_engine(seed());
-    // this->distributionDouble = std::uniform_real_distribution<double>(-0.5, 0.5);
-};
+}
 
 /// <summary>
 /// Initializes a new instance of Individual.
@@ -19,7 +16,7 @@ Individual::Individual()
 Individual::Individual(MLP* mlp) : Individual()
 { 
     this->mlp = mlp;
-};
+}
 
 /// <summary>
 /// Destroys this instance of Individual.
@@ -35,45 +32,64 @@ Individual::~Individual()
 /// Creates a new Individual resulting of the combination of this instance and another Individual.
 /// </summary>
 /// <param name="parent2">The other Individual to create the combination.</param>
-Individual* Individual::mate(const Individual &par2, double mutationRate, double mutationChance) 
+Individual* Individual::mate(const Individual &par2, double mutationChance) 
 { 
-    Individual* child = new Individual();
+    Individual* child = new Individual(this->getMLP()->clone());
 
     // chromosome for offspring
     std::vector<Matrix> childWeights = mlp->getWeights();
     std::vector<Matrix> parentWeights = par2.mlp->getWeights();
     
-    int cut = mutationRate * childWeights.size();
+    int cut = generator.randomDouble(0.0, 1.0) * childWeights.size();
     
-    for(int i=0;i<cut;i++)
+    // std::cout << "cut1: " << cut << std::endl;
+    for(int i=0; i < cut; ++i)
     {
-        double p = distributionDouble(generator);
+        double p = generator.randomDouble(0, 1);
         if(p > mutationChance) {
             for (int j = 0; j < childWeights[i].rows(); j++) {
                 for (int k = 0; k < childWeights[i].cols(); k++) {
-                    childWeights[i][j][k] = distributionDouble(generator);
+                    childWeights[i][j][k] = generator.randomDouble(-0.5, 0.5);
                 }
             }
         }
     }
     
-    for(int i=cut; i<childWeights.size();i++)
+    // std::cout << "cut2: " << cut << std::endl;
+    for(int i = cut; i < childWeights.size(); ++i)
     {
-        double p = distributionDouble(generator);
+        double p = generator.randomDouble(0, 1);
+        // std::cout << "p: " << p << std::endl;
         if(p > mutationChance) {
-            for (int j = 0; j < childWeights[i].rows(); j++) {
-                for (int k = 0; k < childWeights[i].cols(); k++) {
-                    childWeights[i][j][k] = distributionDouble(generator);
+            // std::cout << "mutando" << std::endl;
+            for (int j = 0; j < childWeights[i].rows(); ++j) {
+                // std::cout << "j: " << j << std::endl;
+                for (int k = 0; k < childWeights[i].cols(); ++k) {
+                    // std::cout << "k: " << k << std::endl;
+                    childWeights[i][j][k] = generator.randomDouble(-0.5, 0.5);
                 }
             }
         } else {
+            // std::cout << "no mutando" << std::endl;
             childWeights[i] = parentWeights[i];
         }
     }
     
+    // std::cout << "setting weights" << std::endl;
     child->mlp->setWeights(childWeights);
 
-    child->setFitness(child->getMLP()->getPuntuacion());
+    // std::cout << "getting puntuacion" << std::endl;
+    child->setFitness(child->mlp->getPuntuacion());
 
     return child;
 }
+
+Individual* Individual::clone() const
+{
+    Individual* clone = new Individual(this->getMLP()->clone());
+    clone->setFitness(this->getFitness());
+
+    return clone;
+}
+
+Randonn_generator Individual::generator = Randonn_generator();

@@ -2,7 +2,7 @@
 CXX := g++
 
 # Opciones de compilación
-CXXFLAGS := -std=c++17 -Wpedantic -I./include -g #-fsanitize=address
+CXXFLAGS := -std=c++17 -Wpedantic -I./include -g -fsanitize=address
 
 # Directorios
 SRC_DIR := ./src

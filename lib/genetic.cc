@@ -18,7 +18,6 @@ Genetic::~Genetic()
     
     individuals.clear();
     
-    std::cout<<"Genetic destroyed"<<std::endl;
 }
 
 /// @brief Initializes the genetic algorithm
@@ -39,11 +38,14 @@ void Genetic::initialize()
 void Genetic::evolve()
 {
     // std::vector<Individual*> best = bestIndividuals();
+    // std::cout << "Generation " << generation << std::endl;
     std::vector<Individual*> nextGen = nextGeneration();
     
     for(int i = 0; i < individuals.size();i++)
     {
+        // std::cout << "Individual " << i << " fitness: " << individuals[i]->getFitness() << std::endl;
         delete individuals[i];
+        // std::cout << "Individual " << i << " deleted" << std::endl;
     }
     
     individuals.clear();
@@ -82,27 +84,36 @@ std::vector<Individual*> Genetic::bestIndividuals(double n)
 std::vector<Individual*> Genetic::nextGeneration(double n)
 {
     std::vector<Individual*> nextGen;
-    std::uniform_real_distribution<double> dist(0.0, individuals.size() - 1.0);
     
+    // std::cout << "Sorting" << std::endl;
     std::sort(individuals.begin(), individuals.end(), [](Individual* a, Individual* b) -> bool
     {
         return a->getFitness() > b->getFitness();
     });
     
+    // std::cout << "Best individuals" << std::endl;
     for(int i = 0; i < individuals.size() * n; ++i)
     {
-        nextGen.push_back(individuals[i]);
+        // std::cout << "Best individual " << i << " fitness: " << individuals[i]->getFitness() << std::endl;
+        nextGen.push_back(individuals[i]->clone());
     }
     
+    // std::cout << "Mating" << std::endl;
     for(int i = 0; i < individuals.size() * (1 - n); ++i)
     {
-        int r = dist(generator);
-        int r2 = dist(generator);
+        int r = generator.randomInt(0, individuals.size() - 1);
+        int r2 = generator.randomInt(0, individuals.size() - 1);
 
-        
+        // std::cout << "Mating " << r << " and " << r2 << std::endl;
         Individual* child = individuals[r]->mate(*individuals[r2]);
+        // std::cout << "Child created" << std::endl;
         nextGen.push_back(child);
     }
+
+    // for (int i = 0; i < 5; ++i)
+    // {
+    //     std::cout << "BEST NEXT GENERATION Individual " << i << " fitness: " << nextGen[i]->getFitness() << std::endl;
+    // }
     
     return nextGen;
 }

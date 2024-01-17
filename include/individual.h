@@ -2,6 +2,7 @@
 #define __INDIVIDUAL_H__
 
 #include "mlp.h"
+#include "randonn_generator.h"
 
 /// <summary>
 /// A class that represents an individual member of the population.
@@ -15,12 +16,14 @@ private:
     /// The fitness of this individual.
     /// </summary>
 	int fitness; 
+
+    static Randonn_generator generator;
     
-public:
     /// <summary>
     /// Initializes a new instance of Individual.
     /// </summary>
     Individual();
+public:
     
     /// <summary>
     /// Initializes a new instance of Individual.
@@ -37,7 +40,7 @@ public:
     /// Creates a new Individual resulting of the combination of this instance and another Individual.
     /// </summary>
     /// <param name="parent2">The other Individual to create the combination.</param>
-	Individual* mate(const Individual &parent2, double mutationRate = 0.2, double mutationChance = 0.2); 
+	Individual* mate(const Individual &parent2, double mutationChance = 0.95); 
 
     /// <summary>
     /// Gets the fitness value of this Individual's chromosome.
@@ -47,10 +50,8 @@ public:
     void setFitness(int fitness) { this->fitness = fitness; }
 
     MLP* getMLP() const { return mlp; }
-};
 
-std::random_device seed;
-std::default_random_engine generator(seed());
-std::uniform_real_distribution<double> distributionDouble(-0.5, 0.5);
+    Individual* clone() const;
+};
 
 #endif

@@ -23,12 +23,11 @@ MLP::MLP() {
 }
 
 MLP::~MLP() {
-    for (size_t i = 0; i < _layers.size(); i++) {
+    for (size_t i = 0; i < _layers.size(); ++i) {
         delete _layers[i];
     }
 
-    delete _inputLayer;
-    delete _outputLayer;
+    _layers.clear();
 }
 
 // ============================================
@@ -145,17 +144,33 @@ vector<Matrix> MLP::getWeights() const {
 
 void MLP::setWeights(const vector<Matrix>& weights) {
     // Establece los pesos de cada capa
+    // std::cout << "Setting weights" << std::endl;
     for (size_t i = 0; i < _layers.size(); ++i) {
+        // std::cout << "Layer: " << i << std::endl;
         _layers[i]->setWeights(weights[i]);
     }
 }
 
-int getPuntuacion(vector<double> output) {
+int MLP::getPuntuacion() const {
     // random number
     int puntuacion = 0;
     puntuacion = rand() % 100;
 
     return puntuacion;
+}
+
+MLP* MLP::clone() const {
+    // Clona la red
+    MLP_Builder builder;
+    builder.addLayer(_inputLayer->weights().rows(), _inputLayer->weights()[0].size() - 1, _inputLayer->activationFunction);
+    for (size_t i = 1; i < _layers.size(); ++i) {
+        builder.addLayer(_layers[i]->weights().rows(), _layers[i]->weights()[0].size() - 1, _layers[i]->activationFunction);
+    }
+
+    MLP* mlp = builder.build();
+    mlp->setWeights(getWeights());
+
+    return mlp;
 }
 
 void MLP::updateWeights(double learningRate) {
