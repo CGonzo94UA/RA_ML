@@ -23,7 +23,7 @@ std::string printVector(std::vector<T> const& v) {
 }
 
 int main(){
-    auto [X, Y] = Perceptron::readFromCSV("datasets/128entradas.csv");
+    auto [X, Y] = Matrix::readFromCSV("datasets/128entradas.csv");
     int maxiter = 1001;
 
     // Creates a MLP with 3 layers, the first one with 128 neurons, the second one with 64 neurons and the last one with 1 neuron

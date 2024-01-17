@@ -21,7 +21,7 @@ std::string printVector(std::vector<T> const& v) {
 }
 
 int main(){
-    auto [X, Y] = Perceptron::readFromCSV("datasets/128entradas.csv");
+    auto [X, Y] = Matrix::readFromCSV("datasets/128entradas.csv");
     int maxiter = 1000;
 
     #ifdef DIVIDE_DATASET

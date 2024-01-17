@@ -24,7 +24,7 @@ void p(string s) {
 }
 
 int main(){
-    auto [X, Y] = Perceptron::readFromCSV("datasets/xor.csv");
+    auto [X, Y] = Matrix::readFromCSV("datasets/xor.csv");
     int maxiter = 100;
 
     p("Creating MLP");

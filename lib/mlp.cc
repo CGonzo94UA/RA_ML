@@ -133,6 +133,31 @@ double MLP::test(const Matrix& testData, const Matrix& targetData) {
     
 }
 
+vector<Matrix> MLP::getWeights() const {
+    vector<Matrix> weights;
+    // Obtiene los pesos de cada capa
+    for (size_t i = 0; i < _layers.size(); ++i) {
+        weights.push_back(_layers[i]->weights());
+    }
+
+    return weights;
+}
+
+void MLP::setWeights(const vector<Matrix>& weights) {
+    // Establece los pesos de cada capa
+    for (size_t i = 0; i < _layers.size(); ++i) {
+        _layers[i]->setWeights(weights[i]);
+    }
+}
+
+int getPuntuacion(vector<double> output) {
+    // random number
+    int puntuacion = 0;
+    puntuacion = rand() % 100;
+
+    return puntuacion;
+}
+
 void MLP::updateWeights(double learningRate) {
     // Actualiza los pesos de las capas ocultas y de salida utilizando el descenso de gradiente
 

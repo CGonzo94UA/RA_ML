@@ -22,6 +22,9 @@ class MLP{
         vector<double> getInputs() const;
         void train(const Matrix& trainingData, const Matrix& targetData, size_t epochs, double learningRate);
         double test(const Matrix& testData, const Matrix& targetData);
+        vector<Matrix> getWeights() const;
+        void setWeights(const vector<Matrix>& weights);
+        int getPuntuacion() const;
 
     private:
 
