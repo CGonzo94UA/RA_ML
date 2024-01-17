@@ -28,7 +28,7 @@ int main(){
 
     // Creates a MLP with 3 layers, the first one with 128 neurons, the second one with 64 neurons and the last one with 1 neuron
     MLP_Builder builder = MLP_Builder();
-    builder.addLayer(128, 128);         // First layer
+    builder.addLayer(128, 128);        // First layer
     builder.addLayer(64, 64);           // Second layer
     builder.addLayer(1, 1);             // Third layer (output layer)
 

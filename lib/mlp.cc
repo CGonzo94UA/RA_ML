@@ -48,18 +48,16 @@ vector<double> MLP::getOutputs() const {
     //Checks if _inputLayer is null and if _inputs is also null
     assert(_inputLayer != nullptr && "The MLP must have an input layer or there was an error while building");
 
-    _inputLayer->setInputs(_inputs);
+    _inputLayer->setOutputs(_inputs);
     
-    vector<double> outputs = _inputLayer->feedForward();
+    vector<double> outputs;
 
     // Send the outputs of each layer to the next layer
     for (size_t i = 1; i < _layers.size(); i++) {
-        _layers[i]->setInputs(outputs);
-        outputs = _layers[i]->feedForward();
+        outputs = _layers[i]->feedForward(_layers[i-1]->getOutputs());
+        _layers[i]->setOutputs(outputs);
     }
-
     return outputs;
-
 }
 
 vector<double> MLP::getInputs() const {
@@ -85,18 +83,14 @@ void MLP::train(const Matrix& trainingData, const Matrix& targetData, size_t epo
         for (size_t i = 0; i < trainingData.rows(); ++i) {
             // Establece las entradas
 
-            //Removes the last element of the row (the class)
-            //vector<double> training_row = trainingData.getRow(i);
-            //training_row.pop_back();
-
+            //Set the inputs
             setInputs(trainingData.getRow(i));  //CAMBIAR POR UN METODO PARA SACAR LOS DATOS
             
-            // Realiza el pase hacia adelante (feedforward)
+            // Get the output with feedforward
             output = getOutputs();
-
             target = targetData.getRow(i);
 
-            //Realiza el pase hacia atrás (backpropagation) y actualiza los pesos
+            //Backpropagation and weights update
             backpropagate(output, target);
             updateWeights(learningRate);
         }
@@ -134,27 +128,24 @@ double MLP::test(const Matrix& testData, const Matrix& targetData) {
 }
 
 void MLP::updateWeights(double learningRate) {
-    // Actualiza los pesos de las capas ocultas y de salida utilizando el descenso de gradiente
+    // Start in the last layer
+    _outputLayer->updateWeights(learningRate, _layers[_layers.size()-1]->getOutputs());
 
-    // Comienza por la última capa
-    _outputLayer->updateWeights(learningRate);
-
-    // Luego, actualiza las capas ocultas en orden inverso
-    for (int i = _layers.size() - 2; i >= 0; --i) {
-        _layers[i]->updateWeights(learningRate);
+    // Update the layers in reverse order
+    for (int i = _layers.size() - 2; i >= 1; --i) {
+        _layers[i]->updateWeights(learningRate, _layers[i-1]->getOutputs());
     }
 }
 
 void MLP::backpropagate(const vector<double>& output, const vector<double>& target) {
     vector<double> gradients;
-    // Realiza el paso hacia atrás (backpropagation) para calcular los gradientes
 
-    // Comienza por la última capa
+    // Start in the last layer
     gradients = _outputLayer->calculateGradients(output, target);
-    //cout << "layers: " << _layers.size() << "layers -2: " << _layers.size()-2 << endl;
-    // Luego, calcula los gradientes de las capas ocultas en orden inverso
-    for (int i = _layers.size() - 2; i >= 0; --i) {
-        gradients = _layers[i]->calculateGradientsMedio(gradients, _layers[i+1]->getInputs());
+    
+    // Calculate the gradients in reverse order
+    for (int i = _layers.size() - 2; i >= 1; --i) {
+        gradients = _layers[i]->calculateGradientsMedio(gradients, _layers[i+1]->weights());
     }
 }
 
@@ -325,7 +316,7 @@ MLP* MLP_Builder::build(string filename) {
 void MLP_Display::display(MLP const& mlp) {
     cout << "Input layer: " << endl;
     cout << "Weights: " << endl;
-    cout << mlp._inputLayer->weights() << endl;
+    //cout << mlp._inputLayer->weights() << endl;
 
     for (size_t i = 1; i < mlp._layers.size()-1; i++) {
         cout << "Hidden layer " << i+1 << ": " << endl;
