@@ -1,5 +1,6 @@
 #include "perceptron.h"
 #include "randonn_generator.h"
+#include "functions.h"
 #include <vector>
 #include <random>
 #include <algorithm>
@@ -8,6 +9,8 @@
 
 // ============================================
 // =============== Constructor ================
+/// @brief Constructor of the class Perceptron
+/// @param num_weights The number of weights of the perceptron
 Perceptron::Perceptron(std::size_t const num_weights){
     // One more weight for the bias --> the first weight is the bias
     _weights = generateRandomWeights(num_weights);
@@ -15,13 +18,9 @@ Perceptron::Perceptron(std::size_t const num_weights){
 
 // ============================================
 // =============== Methods ====================
-double sign(double x){
-    if (x >= 0)
-        return 1.0;
-    else
-        return -1.0;
-}
-
+/// @brief Generates random weights for the perceptron
+/// @param num_weights The number of weights of the perceptron
+/// @return A matrix with the random weights
 Matrix Perceptron::generateRandomWeights(std::size_t const num_weights){
     Randonn_generator generator;
     Matrix weights(num_weights, 1);
@@ -33,6 +32,10 @@ Matrix Perceptron::generateRandomWeights(std::size_t const num_weights){
     return weights;
 }
 
+/// @brief Trains the perceptron
+/// @param X The input matrix
+/// @param Y The matrix with the class of each input
+/// @param maxiter The maximum number of iterations
 void Perceptron::train(Matrix const& X, Matrix const& Y, std::size_t const maxiter){
     Randonn_generator generator;
 
@@ -43,7 +46,7 @@ void Perceptron::train(Matrix const& X, Matrix const& Y, std::size_t const maxit
         // Multiply the input matrix by the weights
         Matrix product = X * _weights;
         // Get the predicted output
-        Matrix predicted = product.apply(sign);
+        Matrix predicted = product.apply(ActivationFunctions::sign);
         // Get the number of errors
         Matrix errors = predicted != Y;
         double numErrors = errors.sumcol(0);
@@ -81,11 +84,8 @@ void Perceptron::train(Matrix const& X, Matrix const& Y, std::size_t const maxit
         Matrix xy = X.mult(index, Y[index][0]);
         //std::cout << "xy: " << xy << std::endl;
         _weights += xy.transpose();
-
         //Print the weights
         //std::cout << "Weights: " << _weights << std::endl;
-
-        
     }
 
     // Copy the best weights
@@ -93,20 +93,27 @@ void Perceptron::train(Matrix const& X, Matrix const& Y, std::size_t const maxit
 
 }
 
+/// @brief Classifies the input matrix
+/// @param input The input matrix
+/// @return The predicted output
 double Perceptron::classify(const Matrix& input){
     // Multiply the input matrix by the weights
     Matrix product = input * _weights;
     // Get the predicted output
-    Matrix predicted = product.apply(sign);
+    Matrix predicted = product.apply(ActivationFunctions::sign);
     //std::cout << "Predicted: " << predicted << std::endl;
     return predicted[0][0];
 }
 
+/// @brief Tests the perceptron
+/// @param X The input matrix
+/// @param Y The matrix with the class of each input
+/// @return The accuracy of the perceptron
 double Perceptron::test(Matrix const& X, Matrix const& Y) const{
     // Multiply the input matrix by the weights
     Matrix product = X * _weights;
     // Get the predicted output
-    Matrix predicted = product.apply(sign);
+    Matrix predicted = product.apply(ActivationFunctions::sign);
     // Get the number of errors
     Matrix errors = predicted != Y;
     double numErrors = errors.sumcol(0);
