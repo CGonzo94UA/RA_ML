@@ -1,6 +1,7 @@
 #include "layer.h"
 #include "randonn_generator.h"
 #include "utils.h"
+#include "environment.h"
 
 using namespace std;
 
@@ -36,7 +37,7 @@ void NeuralNetworkLayer::generateRandomWeights(size_t const& width_of_layer, siz
             if (j == 0) {
                 _weights[i][j] = 1.0;
             } else {
-                _weights[i][j] = generator.randomDouble(-0.5, 0.5);
+                _weights[i][j] = generator.randomDouble(MIN_WEIGHT, MAX_WEIGHT);
             }
         }
     }

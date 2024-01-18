@@ -1,4 +1,5 @@
 #include "individual.h"
+#include "environment.h"
 
 /* ============================================
 *  Individual
@@ -56,7 +57,7 @@ Individual* Individual::mate(const Individual &par2, double mutationChance)
         if(p > mutationChance) {
             for (int j = 0; j < childWeights[i].rows(); j++) {
                 for (int k = 0; k < childWeights[i].cols(); k++) {
-                    childWeights[i][j][k] = generator.randomDouble(-0.5, 0.5);
+                    childWeights[i][j][k] = generator.randomDouble(MIN_WEIGHT, MAX_WEIGHT);
                 }
             }
         }
@@ -72,7 +73,7 @@ Individual* Individual::mate(const Individual &par2, double mutationChance)
                 // std::cout << "j: " << j << std::endl;
                 for (int k = 0; k < childWeights[i].cols(); ++k) {
                     // std::cout << "k: " << k << std::endl;
-                    childWeights[i][j][k] = generator.randomDouble(-0.5, 0.5);
+                    childWeights[i][j][k] = generator.randomDouble(MIN_WEIGHT, MAX_WEIGHT);
                 }
             }
         } else {
