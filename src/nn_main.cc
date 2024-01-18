@@ -24,7 +24,7 @@ void p(string s) {
 }
 
 int main(){
-    auto [X, Y] = Matrix::readFromCSV("datasets/nonlinear_dataset.csv");
+    auto [X, Y] = Matrix::readFromCSV("datasets/xor2.csv");
     int maxiter = 100;
 
     p("Creating MLP");

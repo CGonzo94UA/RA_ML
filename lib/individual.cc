@@ -56,7 +56,7 @@ Individual* Individual::mate(const Individual &par2, double mutationChance)
         if(p > mutationChance) {
             for (int j = 0; j < childWeights[i].rows(); j++) {
                 for (int k = 0; k < childWeights[i].cols(); k++) {
-                    double random = generator.randomDouble(-5, 5);
+                    double random = generator.randomDouble(-10.0, 10.0);
                     //std::cout << "random: " << random << std::endl;
                     childWeights[i][j][k] = random;
                 }
@@ -74,20 +74,13 @@ Individual* Individual::mate(const Individual &par2, double mutationChance)
                 // std::cout << "j: " << j << std::endl;
                 for (int k = 0; k < childWeights[i].cols(); ++k) {
                     // std::cout << "k: " << k << std::endl;
-                    childWeights[i][j][k] = generator.randomDouble(-5, 5);
+                    childWeights[i][j][k] = generator.randomDouble(-10.0, 10.0);
                 }
             }
         } else {
             // std::cout << "no mutando" << std::endl;
             childWeights[i] = parentWeights[i];
         }
-    }
-    
-    std::cout << "setting weights" << std::endl;
-    for(size_t i = 0; i < childWeights.size(); ++i)
-    {
-        std::cout << "layer " << i << std::endl;
-        std::cout << childWeights[i] << std::endl;
     }
 
     child->mlp->setWeights(childWeights);
