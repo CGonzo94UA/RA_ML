@@ -108,7 +108,7 @@ vector<double> NeuralNetworkLayer::calculateGradientsMedio(const vector<double>&
     for (size_t i = 0; i < _signal.size(); ++i) {
         activationDerivative.push_back(ActivationFunctions::sigmoid_prime(_signal[i]));
     }
-    cout << "HOLIWI -- NextLayerGradients.size = " << nextLayerGradients.size() << " activationDerivative.size = " << activationDerivative.size() << " _gradients.size = " << _gradients.size() << " weights_rows = " << weights.rows() << " weights_cols = " << weights.cols() << endl;
+    //cout << "HOLIWI -- NextLayerGradients.size = " << nextLayerGradients.size() << " activationDerivative.size = " << activationDerivative.size() << " _gradients.size = " << _gradients.size() << " weights_rows = " << weights.rows() << " weights_cols = " << weights.cols() << endl;
     // Multiply the gradients of the next layer by the weights of the next layer and multiply them by the activation function
     for (size_t i = 0; i < _gradients.size(); ++i) {
         _gradients[i] = 0.0;
@@ -124,7 +124,7 @@ vector<double> NeuralNetworkLayer::calculateGradientsMedio(const vector<double>&
 void NeuralNetworkLayer::updateWeights(const double learningRate, const vector<double> outputs) {
     // Update the weights by subtracting the gradient from the old weights by the learning rate by the output of the previous layer
     for (size_t i = 0; i < _weights.rows(); ++i) {
-        for (size_t j = 0; j < _weights[i].size(); ++j) {
+        for (size_t j = 1; j < _weights[i].size(); ++j) {
             _weights[i][j] -= learningRate * _gradients[i] * outputs[j];
         }
     }

@@ -156,30 +156,6 @@ void MLP::backpropagate(const vector<double>& output, const vector<double>& targ
     }
 }
 
-#include <fstream>
-
-void MLP::saveWeights() {
-    // Guarda los pesos de la red en un archivo
-    // TODO
-
-    // Creates the file
-    std::ofstream file;
-    file.open("weights.txt");
-
-
-    // Writes the weights of the hidden layers line by line
-    for (size_t i = 0; i < _layers.size(); i++) {
-        for (size_t j = 0; j < _layers[i]->weights().rows(); j++) {
-            for (size_t k = 0; k < _layers[i]->weights()[j].size(); k++) {
-                file << _layers[i]->weights()[j][k] << "-";
-            }
-            file << endl;
-        }
-        file << "===" << endl;
-    }
-
-}
-
 // =================================================
 // =============== MLP_BUILDER CLASS ===============
 
@@ -249,66 +225,6 @@ MLP* MLP_Builder::build() {
     _mlp = nullptr;
 
     return mlp;
-}
-
-//TODO: CHECK IF THIS WORKS ALONG WITH THE MLP::SAVEWEIGHTS() METHOD
-MLP* MLP_Builder::build(string filename) {
-    
-    // Creates the MLP From a file
-
-    // Creates the MLP
-    MLP* mlp = new MLP();
-    vector<vector<double>> weights_v;
-    size_t contador = 0;
-    //reads the file, line by line. Each line is a different layer neuron and each layer is separated by "==="
-
-    // Opens the file
-    ifstream file(filename);
-    string line;
-
-    // Reads the file line by line
-    while (getline(file, line)) {
-        // Checks if the line is a separator
-        if (line == "===") {
-            
-            // Creates a Matrix with the weights
-            Matrix weights(weights_v.size(), weights_v[0].size(), weights_v);
-
-            // Adds the weights to the layer
-            mlp->_layers.push_back(new NeuralNetworkLayer(weights.rows(), weights.cols()));
-            mlp->_layers[mlp->_layers.size() - 1]->setWeights(weights);
-
-            // Adds the layer to the MLP
-            if (mlp->_inputLayer == nullptr) {
-                mlp->_inputLayer = mlp->_layers[0];
-            }
-
-            mlp->_outputLayer = mlp->_layers[mlp->_layers.size() - 1];
-            continue;
-
-        }
-
-        // Splits the line by the "-" separator
-        vector<string> tokens;
-        stringstream ss(line);
-        string token;
-        while (getline(ss, token, '-')) {
-            tokens.push_back(token);
-        }
-
-        // Converts the tokens to doubles and adds them to the weights vector
-        for (size_t i = 0; i < tokens.size(); i++) {
-            weights_v[contador].push_back(stod(tokens[i]));
-        }
-
-
-    }
-
-    // Closes the file
-    file.close();
-
-    return mlp;
-
 }
 
 
