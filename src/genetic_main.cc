@@ -1,11 +1,11 @@
 #include "genetic.h"
 
 int main(){
-    auto [X, Y] = Matrix::readFromCSV("datasets/7entradas.csv");
-    vector<int> topology = {7, 5, 3, 1};
+    auto [X, Y] = Matrix::readFromCSV("datasets/nonlinear_dataset.csv");
+    vector<int> topology = {2, 3, 1};
 
     // crea un elemento de la clase Genetic
-    Genetic *genetic = new Genetic(35, Individual::createRandomIndividual, topology, X, Y);
+    Genetic *genetic = new Genetic(100, Individual::createRandomIndividual, topology, X, Y);
 
     // inicializa el algoritmo genetico
     genetic->initialize();
@@ -28,7 +28,7 @@ int main(){
     // std::cout << "=======================================" << "\n";
 
     // evoluciona el algoritmo genetico
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 1000; i++) {
         // imprime la generacion actual
         std::cout << "Generation: " << genetic->getGeneration() << "\n";
         genetic->evolve();

@@ -48,9 +48,9 @@ Individual* Individual::mate(const Individual &par2, double mutationChance)
     std::vector<Matrix> parentWeights = par2.mlp->getWeights();
     
     // Calculate the cut point
-    int cut = generator.randomDouble(0.0, 1.0) * childWeights.size();
+    int cut = round(generator.randomDouble(0.0, 1.0) * childWeights.size());
     
-    // std::cout << "cut: " << cut << std::endl;
+    //std::cout << "cut: " << cut << std::endl;
     for(int i=0; i < cut; ++i)
     {
         double p = generator.randomDouble(0, 1);
@@ -81,8 +81,7 @@ Individual* Individual::mate(const Individual &par2, double mutationChance)
             childWeights[i] = parentWeights[i];
         }
     }
-    
-    // std::cout << "setting weights" << std::endl;
+
     child->mlp->setWeights(childWeights);
 
     return child;
@@ -127,6 +126,6 @@ Individual* Individual::createRandomIndividual(vector<int> topology, const Matri
 /// @return The fitness of this instance of Individual (accuracy of the MLP).
 double Individual::calculateFitness(const Matrix& X, const Matrix& Y) {
     double acc = mlp->test(X, Y);
-    // std::cout << "Accuracy: " << acc << "\n";
+    //std::cout << "Accuracy: " << acc << "\n";
     return acc;
 }

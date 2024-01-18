@@ -54,16 +54,14 @@ vector<double> NeuralNetworkLayer::feedForward() const {
     // debug_msg_ln("Neuronas: " + _weights.rows(), 3);
     // debug_msg_ln("Entradas: " + _inputs.size(), 3);
     for (size_t i = 0; i < _weights.rows(); i++) {
-        double output = 0;
+        double output = _weights[i][0];       // Bias
         // debug_msg("Neurona " + i, 3);
         // debug_msg_ln("Num pesos: " + _weights[i].size(), 3);
-        output += _weights[i][0];       // Bias
         for (size_t j = 1; j < _weights[i].size(); j++) {
             // debug_msg("i: " + i, 3);
             // debug_msg_ln("j: " + j, 3);
             output += _weights[i][j] * _inputs[j-1];
-        }
-        
+        }        
         outputs.push_back(activationFunction(output));
         
     }

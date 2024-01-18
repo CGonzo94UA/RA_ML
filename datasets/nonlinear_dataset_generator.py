@@ -5,13 +5,28 @@ import pandas as pd
 # Crear datos para un problema no linealmente separable
 np.random.seed(42)
 
-# Clase 1: Puntos en el cuadrante superior izquierdo y cuadrante inferior derecho
-class1_x = np.concatenate([np.random.uniform(-1, 0, 300), np.random.uniform(0, 1, 300)])
-class1_y = np.concatenate([np.random.uniform(0, 1, 300), np.random.uniform(-1, 0, 300)])
+# Definir el margen
+margen = 0.2
 
-# Clase 2: Puntos en el cuadrante superior derecho y cuadrante inferior izquierdo
-class2_x = np.concatenate([np.random.uniform(0, 1, 300), np.random.uniform(-1, 0, 300)])
-class2_y = np.concatenate([np.random.uniform(0, 1, 300), np.random.uniform(-1, 0, 300)])
+# Clase 1: Puntos en el cuadrante superior izquierdo y cuadrante inferior derecho con margen
+class1_x = np.concatenate([
+    np.random.uniform(-1 + margen, -margen, 300),
+    np.random.uniform(margen, 1 - margen, 300)
+])
+class1_y = np.concatenate([
+    np.random.uniform(margen, 1 - margen, 300),
+    np.random.uniform(-1 + margen, -margen, 300)
+])
+
+# Clase 2: Puntos en el cuadrante superior derecho y cuadrante inferior izquierdo con margen
+class2_x = np.concatenate([
+    np.random.uniform(margen, 1 - margen, 300),
+    np.random.uniform(-1 + margen, -margen, 300)
+])
+class2_y = np.concatenate([
+    np.random.uniform(margen, 1 - margen, 300),
+    np.random.uniform(-1 + margen, -margen, 300)
+])
 
 
 # Crear un DataFrame con los datos
@@ -25,7 +40,7 @@ data = pd.DataFrame({
 data = data.sample(frac=1, random_state=42).reset_index(drop=True)
 
 # Guardar el DataFrame en un archivo CSV
-data.to_csv('datasets/nonlinear_dataset.csv', index=False)
+data.to_csv('datasets/nonlinear_dataset.csv', index=False, header=False)
 
 # Verificar el DataFrame
 print(data.head())
