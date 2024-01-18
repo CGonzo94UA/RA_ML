@@ -3,4 +3,4 @@
 // | 1: debug mlp train |
 // | 2: debug mlp test  |
 // +====================+
-#define DEBUG 2
+#define DEBUG 2 || 1

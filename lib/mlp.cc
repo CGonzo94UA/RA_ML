@@ -140,11 +140,18 @@ void MLP::updateWeights(double learningRate) {
 void MLP::backpropagate(const vector<double>& output, const vector<double>& target) {
     vector<double> gradients;
 
+    #if DEBUG == 1
+        cout << "Layers: " << _layers.size() << endl;
+        cout << "Back Propagating Layer " << _layers.size() << "/" << _layers.size() << " (OUTPUT)" << endl;
+    #endif
     // Start in the last layer
     gradients = _outputLayer->calculateGradients(output, target);
     
     // Calculate the gradients in reverse order
-    for (int i = _layers.size() - 2; i >= 1; --i) {
+    for (int i = _layers.size() - 2; i >= 0; --i) {
+        #if DEBUG == 1
+        cout << "Back Propagating Layer " << i+1 << "/" << _layers.size() << endl;
+        #endif
         gradients = _layers[i]->calculateGradientsMedio(gradients, _layers[i+1]->weights());
     }
 }
