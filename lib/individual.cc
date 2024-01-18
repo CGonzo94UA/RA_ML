@@ -47,16 +47,18 @@ Individual* Individual::mate(const Individual &par2, double mutationChance)
     std::vector<Matrix> parentWeights = par2.mlp->getWeights();
     
     // Calculate the cut point
-    int cut = generator.randomDouble(0.0, 1.0) * childWeights.size();
+    int cut = round(generator.randomDouble(0.0, 1.0) * childWeights.size());
     
-    // std::cout << "cut: " << cut << std::endl;
+    //std::cout << "cut: " << cut << std::endl;
     for(int i=0; i < cut; ++i)
     {
         double p = generator.randomDouble(0, 1);
         if(p > mutationChance) {
             for (int j = 0; j < childWeights[i].rows(); j++) {
                 for (int k = 0; k < childWeights[i].cols(); k++) {
-                    childWeights[i][j][k] = generator.randomDouble(-0.5, 0.5);
+                    double random = generator.randomDouble(-5, 5);
+                    //std::cout << "random: " << random << std::endl;
+                    childWeights[i][j][k] = random;
                 }
             }
         }
@@ -72,7 +74,7 @@ Individual* Individual::mate(const Individual &par2, double mutationChance)
                 // std::cout << "j: " << j << std::endl;
                 for (int k = 0; k < childWeights[i].cols(); ++k) {
                     // std::cout << "k: " << k << std::endl;
-                    childWeights[i][j][k] = generator.randomDouble(-0.5, 0.5);
+                    childWeights[i][j][k] = generator.randomDouble(-5, 5);
                 }
             }
         } else {
@@ -81,7 +83,13 @@ Individual* Individual::mate(const Individual &par2, double mutationChance)
         }
     }
     
-    // std::cout << "setting weights" << std::endl;
+    std::cout << "setting weights" << std::endl;
+    for(size_t i = 0; i < childWeights.size(); ++i)
+    {
+        std::cout << "layer " << i << std::endl;
+        std::cout << childWeights[i] << std::endl;
+    }
+
     child->mlp->setWeights(childWeights);
 
     return child;
@@ -126,6 +134,6 @@ Individual* Individual::createRandomIndividual(vector<int> topology, const Matri
 /// @return The fitness of this instance of Individual (accuracy of the MLP).
 double Individual::calculateFitness(const Matrix& X, const Matrix& Y) {
     double acc = mlp->test(X, Y);
-    // std::cout << "Accuracy: " << acc << "\n";
+    //std::cout << "Accuracy: " << acc << "\n";
     return acc;
 }

@@ -156,9 +156,9 @@ void MLP::setWeights(const vector<Matrix>& weights) {
 MLP* MLP::clone() const {
     // Clona la red
     MLP_Builder builder;
-    builder.addLayer(_inputLayer->weights().rows(), _inputLayer->weights()[0].size() - 1, _inputLayer->activationFunction);
+    builder.addLayer(_inputLayer->weights().rows(), _inputLayer->weights()[0].size() - 1, _inputLayer->getActivationFunction());
     for (size_t i = 1; i < _layers.size(); ++i) {
-        builder.addLayer(_layers[i]->weights().rows(), _layers[i]->weights()[0].size() - 1, _layers[i]->activationFunction);
+        builder.addLayer(_layers[i]->weights().rows(), _layers[i]->weights()[0].size() - 1, _layers[i]->getActivationFunction());
     }
 
     MLP* mlp = builder.build();

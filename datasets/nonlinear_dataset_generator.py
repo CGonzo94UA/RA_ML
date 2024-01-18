@@ -25,7 +25,7 @@ data = pd.DataFrame({
 data = data.sample(frac=1, random_state=42).reset_index(drop=True)
 
 # Guardar el DataFrame en un archivo CSV
-data.to_csv('datasets/nonlinear_dataset.csv', index=False)
+data.to_csv('datasets/nonlinear_dataset.csv', index=False, header=False)
 
 # Verificar el DataFrame
 print(data.head())

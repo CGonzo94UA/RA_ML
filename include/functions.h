@@ -36,6 +36,10 @@ namespace ActivationFunctions{
         return x < 0.5 ? -1.0 : 1.0;
     }
 
+    inline double tanh(double x) {
+        return tanh(x);
+    }
+
 }
 
 #endif

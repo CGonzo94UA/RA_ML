@@ -24,12 +24,12 @@ void p(string s) {
 }
 
 int main(){
-    auto [X, Y] = Matrix::readFromCSV("datasets/xor.csv");
+    auto [X, Y] = Matrix::readFromCSV("datasets/nonlinear_dataset.csv");
     int maxiter = 100;
 
     p("Creating MLP");
     MLP_Builder builder = MLP_Builder();
-    builder.addLayer(2, 3);
+    builder.addLayer(3, 2);
     builder.addLayer(1, 2);
     // builder.addLayer(128, 128);         // First layer
     // builder.addLayer(64, 64);           // Second layer
@@ -38,7 +38,7 @@ int main(){
     p("Building MLP");
     MLP* mlp = builder.build();
 
-    // MLP_Display::display(*mlp);
+    MLP_Display::display(*mlp);
 
     p("Training MLP");
     mlp->train(X, Y, maxiter, 0.1);
