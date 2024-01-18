@@ -5,3 +5,7 @@
 // | 3: debug feed forward |
 // +=======================+
 #define DEBUG 0
+
+
+#define MIN_WEIGHT -5
+#define MAX_WEIGHT 5

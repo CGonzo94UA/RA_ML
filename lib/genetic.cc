@@ -123,8 +123,8 @@ std::vector<Individual*> Genetic::nextGeneration(double n)
     // std::cout << "Mating" << std::endl;
     for(int i = 0; i < individuals.size() * (1 - n); ++i)
     {
-        int r = generator.randomInt(0, individuals.size() - 1);
-        int r2 = generator.randomInt(0, individuals.size() - 1);
+        int r = generator.randomInt(0, individuals.size() * n);
+        int r2 = generator.randomInt(0, individuals.size() * n);
 
         // std::cout << "Mating " << r << " and " << r2 << std::endl;
         Individual* child = individuals[r]->mate(*individuals[r2]);

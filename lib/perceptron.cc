@@ -1,6 +1,7 @@
 #include "perceptron.h"
 #include "randonn_generator.h"
 #include "functions.h"
+#include "environment.h"
 #include <vector>
 #include <random>
 #include <algorithm>
@@ -33,7 +34,7 @@ Matrix Perceptron::generateRandomWeights(std::size_t const num_weights){
     Matrix weights(num_weights, 1);
 
 	for (int i = 1; i < weights.size(); i++) {
-		weights[i][0] = generator.randomDouble(-0.5, 0.5);
+		weights[i][0] = generator.randomDouble(MIN_WEIGHT, MAX_WEIGHT);
 	}
 
     return weights;
