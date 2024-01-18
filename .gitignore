@@ -36,3 +36,6 @@
 
 # ds_store files
 .DS_Store
+
+# dSYM files
+*.dSYM
