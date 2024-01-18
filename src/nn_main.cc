@@ -24,12 +24,14 @@ void p(string s) {
 }
 
 int main(){
-    auto [X, Y] = Perceptron::readFromCSV("datasets/xor.csv");
-    int maxiter = 100;
+    auto [X, Y] = Perceptron::readFromCSV("datasets/7entradas.csv");
+    int maxiter = 10000;
 
     p("Creating MLP");
     MLP_Builder builder = MLP_Builder();
-    builder.addLayer(2, 3);
+    builder.addLayer(5, 7);
+    builder.addLayer(4, 5);
+    builder.addLayer(2, 4);
     builder.addLayer(1, 2);
     // builder.addLayer(128, 128);         // First layer
     // builder.addLayer(64, 64);           // Second layer
