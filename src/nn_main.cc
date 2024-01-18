@@ -25,10 +25,11 @@ void p(string s) {
 
 int main(){
     auto [X, Y] = Perceptron::readFromCSV("datasets/xor.csv");
-    int maxiter = 100;
+    int maxiter = 1000;
 
     p("Creating MLP");
     MLP_Builder builder = MLP_Builder();
+    builder.addLayer(2, 2);
     builder.addLayer(2, 2);
     builder.addLayer(1, 2);
     // builder.addLayer(128, 128);         // First layer
@@ -41,7 +42,7 @@ int main(){
     // MLP_Display::display(*mlp);
 
     p("Training MLP");
-    mlp->train(X, Y, maxiter, 0.05);
+    mlp->train(X, Y, maxiter, 0.1);
 
     // MLP_Display::display(*mlp);
 

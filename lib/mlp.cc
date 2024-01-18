@@ -148,7 +148,7 @@ void MLP::backpropagate(const vector<double>& output, const vector<double>& targ
     gradients = _outputLayer->calculateGradients(output, target);
     
     // Calculate the gradients in reverse order
-    for (int i = _layers.size() - 2; i >= 0; --i) {
+    for (int i = _layers.size() - 2; i >= 1; --i) {
         #if DEBUG == 1
         cout << "Back Propagating Layer " << i+1 << "/" << _layers.size() << endl;
         #endif
