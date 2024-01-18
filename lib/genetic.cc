@@ -2,6 +2,20 @@
 #include "individual.h"
 #include "mlp.h"
 
+/* ============================================
+*  Genetic
+*  Represents the genetic algorithm
+* ============================================
+*/
+
+// ============================================
+// =============== Constructors ===============
+/// @brief Initializes a new instance of Genetic.
+/// @param population The size of the population.
+/// @param createRandomIndividual The function to create a random individual.
+/// @param topology The topology of the MLP.
+/// @param X The input matrix.
+/// @param Y The classes matrix.
 Genetic::Genetic(int population, 
     std::function<Individual*(vector<int>, const Matrix& X, const Matrix& Y)> createRandomIndividual, 
     vector<int> topology, const Matrix& X, const Matrix& Y)
@@ -14,6 +28,8 @@ Genetic::Genetic(int population,
     this->generation = 1;
 }
 
+// ========================================
+// ============== Destructor ==============
 Genetic::~Genetic()
 {
     for(int i = 0; i < individuals.size();i++)
@@ -25,8 +41,9 @@ Genetic::~Genetic()
     
 }
 
-/// @brief Initializes the genetic algorithm
-/// @details Initializes the genetic algorithm by creating a population of random individuals
+// ============================================
+// ================= Methods ==================
+/// @brief Initializes the genetic algorithm by creating a population of random individuals
 void Genetic::initialize()
 {
     individuals.clear();
@@ -38,8 +55,7 @@ void Genetic::initialize()
     }
 }
 
-/// @brief Updates the genetic algorithm
-/// @details Updates the genetic algorithm by evolving the population
+/// @brief Updates the genetic algorithm by evolving the population
 void Genetic::evolve()
 {
     // std::vector<Individual*> best = bestIndividuals();
@@ -66,7 +82,7 @@ void Genetic::evolve()
 }
 
 /// @brief Gets the best individuals of the population
-/// @details Gets the best individuals of the population
+/// @return The best individuals of the population
 std::vector<Individual*> Genetic::bestIndividuals(double n)
 {
     std::vector<Individual*> best;
@@ -85,7 +101,7 @@ std::vector<Individual*> Genetic::bestIndividuals(double n)
 }
 
 /// @brief Gets the next generation of the population
-/// @details Gets the next generation of the population
+/// @return The next generation of the population
 std::vector<Individual*> Genetic::nextGeneration(double n)
 {
     std::vector<Individual*> nextGen;

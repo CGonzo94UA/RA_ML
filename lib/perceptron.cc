@@ -7,6 +7,13 @@
 
 #define ITERATION_INFO 100
 
+/* ============================================
+*  Perceptron
+*  Represents a perceptron
+* ============================================
+*/
+
+
 // ============================================
 // =============== Constructor ================
 /// @brief Constructor of the class Perceptron

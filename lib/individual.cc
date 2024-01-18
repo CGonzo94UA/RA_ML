@@ -1,26 +1,31 @@
 #include "individual.h"
 
-/// <summary>
-/// Initializes a new instance of Individual.
-/// </summary>
+/* ============================================
+*  Individual
+*  Represents an individual of the population: a MLP and its fitness
+* ============================================
+*/
+
+// ============================================
+// =============== Constructors ===============
+/// @brief Initializes a new instance of Individual.
 Individual::Individual()
 {
     this->mlp = NULL;
-    this->fitness = 0;
+    this->fitness = 0.0;
 
 }
 
-/// <summary>
-/// Initializes a new instance of Individual.
-/// </summary>
+/// @brief Initializes a new instance of Individual with a MLP.
 Individual::Individual(MLP* mlp) : Individual()
 { 
     this->mlp = mlp;
+    this->fitness = 0.0;
 }
 
-/// <summary>
-/// Destroys this instance of Individual.
-/// </summary>
+// ============================================
+// =============== Destructor ===============
+/// @brief Destroys this instance of Individual.
 Individual::~Individual()
 {
     if(mlp != NULL)
@@ -28,21 +33,23 @@ Individual::~Individual()
     mlp = NULL;
 }
 
-/// <summary>
-/// Creates a new Individual resulting of the combination of this instance and another Individual.
-/// </summary>
-/// <param name="parent2">The other Individual to create the combination.</param>
+// ============================================
+// ================= Methods ==================
+/// @brief Creates a new Individual resulting of the combination of this instance and another Individual.
+/// @param par2 The other Individual.
+/// @param mutationChance The chance of mutation.
+/// @return The new Individual.
 Individual* Individual::mate(const Individual &par2, double mutationChance) 
 { 
     Individual* child = new Individual(this->getMLP()->clone());
 
-    // chromosome for offspring
     std::vector<Matrix> childWeights = mlp->getWeights();
     std::vector<Matrix> parentWeights = par2.mlp->getWeights();
     
+    // Calculate the cut point
     int cut = generator.randomDouble(0.0, 1.0) * childWeights.size();
     
-    // std::cout << "cut1: " << cut << std::endl;
+    // std::cout << "cut: " << cut << std::endl;
     for(int i=0; i < cut; ++i)
     {
         double p = generator.randomDouble(0, 1);
@@ -55,7 +62,6 @@ Individual* Individual::mate(const Individual &par2, double mutationChance)
         }
     }
     
-    // std::cout << "cut2: " << cut << std::endl;
     for(int i = cut; i < childWeights.size(); ++i)
     {
         double p = generator.randomDouble(0, 1);
@@ -81,6 +87,8 @@ Individual* Individual::mate(const Individual &par2, double mutationChance)
     return child;
 }
 
+/// @brief Clones this instance of Individual.
+/// @return The new Individual.
 Individual* Individual::clone() const
 {
     Individual* clone = new Individual(this->getMLP()->clone());
@@ -91,6 +99,11 @@ Individual* Individual::clone() const
 
 Randonn_generator Individual::generator = Randonn_generator();
 
+/// @brief Creates a new random Individual.
+/// @param topology The topology of the MLP. Int vector with the number of neurons of each layer.
+/// @param X The input matrix.
+/// @param Y The classes matrix.
+/// @return The new Individual.
 Individual* Individual::createRandomIndividual(vector<int> topology, const Matrix& X, const Matrix& Y)
 {
     MLP_Builder builder = MLP_Builder();
@@ -109,6 +122,8 @@ Individual* Individual::createRandomIndividual(vector<int> topology, const Matri
     return ind;
 }
 
+/// @brief Calculates the fitness of this instance of Individual using the test method of the MLP.
+/// @return The fitness of this instance of Individual (accuracy of the MLP).
 double Individual::calculateFitness(const Matrix& X, const Matrix& Y) {
     double acc = mlp->test(X, Y);
     // std::cout << "Accuracy: " << acc << "\n";

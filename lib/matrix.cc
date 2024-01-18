@@ -9,6 +9,12 @@
 
 using namespace std;
 
+/* ============================================
+*  Matrix
+*  Represents a matrix and its operations
+* ============================================
+*/
+
 // ============================================
 // =============== Constructors ===============
 /// @brief Default constructor of the class Matrix

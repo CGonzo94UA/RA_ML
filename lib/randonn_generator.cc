@@ -1,10 +1,20 @@
 #include "Randonn_generator.h"
 
+/* ============================================
+*  Randonn_generator
+*  Represents a random generator
+* ============================================
+*/
+
+// ============================================
+// =============== Constructors ===============
 Randonn_generator::Randonn_generator()
 {
     initialize();
 }
 
+// ========================================
+// ============== Destructor ==============
 Randonn_generator::~Randonn_generator()
 {
     // std::cout<<"Random generator destroyed"<<std::endl;
@@ -17,8 +27,7 @@ Randonn_generator::~Randonn_generator()
 //     this->seed = seed;
 // }
 
-/// @brief Initializes the random generator
-/// @details Initializes the random generator by creating a random device and a default random engine
+/// @brief Initializes the random generator by creating a random device and a default random engine
 void Randonn_generator::initialize()
 {
     generator = std::default_random_engine(seed());
