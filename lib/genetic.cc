@@ -82,6 +82,7 @@ void Genetic::evolve()
 }
 
 /// @brief Gets the best individuals of the population
+/// @param n The percentage of individuals to get
 /// @return The best individuals of the population
 std::vector<Individual*> Genetic::bestIndividuals(double n)
 {
