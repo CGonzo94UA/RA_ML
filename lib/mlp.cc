@@ -163,7 +163,7 @@ MLP* MLP::clone() const {
 
 void MLP::updateWeights(double learningRate) {
     // Start in the last layer
-    _outputLayer->updateWeights(learningRate, _layers[_layers.size()-1]->getOutputs());
+    _outputLayer->updateWeights(learningRate, _layers[_layers.size()-2]->getOutputs());
 
     // Update the layers in reverse order
     for (int i = _layers.size() - 2; i >= 1; --i) {

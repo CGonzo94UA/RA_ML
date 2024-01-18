@@ -32,7 +32,7 @@ class NeuralNetworkLayer{
         vector<double> calculateGradients(const vector<double>& output, const vector<double>& target);
         vector<double> calculateGradientsMedio(const vector<double>& nextLayerGradients, const Matrix& weights);
         double activationFunctionDerivative(double x);
-        void updateWeights(const double learningRate, const vector<double>);
+        void updateWeights(const double learningRate, const vector<double>&);
         void setOutputs(const vector<double>& inputs);
         void setWeights(const Matrix& weights) { _weights = weights; }
         void setSignals(const vector<double>& signals);

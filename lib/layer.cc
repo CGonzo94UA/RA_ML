@@ -121,11 +121,12 @@ vector<double> NeuralNetworkLayer::calculateGradientsMedio(const vector<double>&
     return _gradients;
 }
 
-void NeuralNetworkLayer::updateWeights(const double learningRate, const vector<double> outputs) {
+void NeuralNetworkLayer::updateWeights(const double learningRate, const vector<double>& outputs) {
     // Update the weights by subtracting the gradient from the old weights by the learning rate by the output of the previous layer
+    //cout << "Gradients size: " << _gradients.size() << " outputs size: " << outputs.size() << " _weights.rows = " << _weights.rows() << " _weights.cols() = " << _weights.cols()<< endl;
     for (size_t i = 0; i < _weights.rows(); ++i) {
         for (size_t j = 1; j < _weights[i].size(); ++j) {
-            _weights[i][j] -= learningRate * _gradients[i] * outputs[j];
+            _weights[i][j] -= learningRate * _gradients[i] * outputs[j-1];
         }
     }
 

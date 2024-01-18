@@ -39,6 +39,15 @@ MLP_Builder build7entradas(){
     return builder;
 }
 
+MLP_Builder build3entradas(){
+    MLP_Builder builder = MLP_Builder();
+    builder.addLayer(3, 3);
+    builder.addLayer(3, 3);
+    builder.addLayer(2, 3);
+    builder.addLayer(1, 2);
+    return builder;
+}
+
 MLP_Builder buildVersicolor(){
     MLP_Builder builder = MLP_Builder();
     builder.addLayer(4, 4);
@@ -47,12 +56,22 @@ MLP_Builder buildVersicolor(){
     return builder;
 }
 
+MLP_Builder build128entradas(){
+    MLP_Builder builder = MLP_Builder();
+    builder.addLayer(128, 128);
+    builder.addLayer(128, 128);
+    builder.addLayer(64, 128);
+    builder.addLayer(32, 64);
+    builder.addLayer(1, 32);
+    return builder;
+}
+
 int main(){
-    auto [X, Y] = Matrix::readFromCSV("datasets/xor.csv");
+    auto [X, Y] = Matrix::readFromCSV("datasets/128entradas.csv");
     int maxiter = 100;
 
     p("Creating MLP");
-    MLP_Builder builder = buildVersicolor();
+    MLP_Builder builder = build128entradas();
 
     p("Building MLP");
     MLP* mlp = builder.build();
@@ -60,12 +79,14 @@ int main(){
     // MLP_Display::display(*mlp);
 
     p("Training MLP");
-    mlp->train(X, Y, maxiter, 0.2);
+    mlp->train(X, Y, maxiter, 0.1);
 
     // MLP_Display::display(*mlp);
 
     p("Testing MLP");
     std::cout << "Accuracy: " << mlp->test(X, Y) << "\n";
+
+    delete mlp;
 
     return 0;
 }
