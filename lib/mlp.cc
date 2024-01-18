@@ -51,8 +51,6 @@ vector<double> MLP::getOutputs() const {
     
     vector<double> outputs = _inputLayer->feedForward();
 
-    std::cout << "FeedForwarding" << std::endl;
-
     // Send the outputs of each layer to the next layer
     for (size_t i = 1; i < _layers.size(); i++) {
         _layers[i]->setInputs(outputs);
@@ -130,7 +128,9 @@ double MLP::test(const Matrix& testData, const Matrix& targetData) {
 
     Matrix predicted = output.apply(ActivationFunctions::binary);
     double numErrors = (predicted != targetData).sumcol(0);
-    return 1.0 - (numErrors / static_cast<double>(targetData.rows()));
+    double accuracy = 1.0 - (numErrors / static_cast<double>(targetData.rows()));
+    // std::cout << "Accuracy: " << accuracy << std::endl;
+    return accuracy;
     
 }
 

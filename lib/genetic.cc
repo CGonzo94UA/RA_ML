@@ -32,7 +32,6 @@ void Genetic::initialize()
     individuals.clear();
     individuals.resize(population);
     
-    std::cout << "Creating random individuals" << std::endl;
     for(int i =0;i<population;i++)
     { 
         individuals[i] = createRandomIndividual(this->topology, X, Y);
@@ -112,7 +111,10 @@ std::vector<Individual*> Genetic::nextGeneration(double n)
 
         // std::cout << "Mating " << r << " and " << r2 << std::endl;
         Individual* child = individuals[r]->mate(*individuals[r2]);
-        child->setFitness(child->calculateFitness(X, Y));
+        // std::cout << "Child fitness: " << child->getFitness() << std::endl;
+        double fitness = child->calculateFitness(X, Y);
+        child->setFitness(fitness);
+        // std::cout << "Child fitness: " << child->getFitness() << std::endl;
 
         // std::cout << "Child created" << std::endl;
         nextGen.push_back(child);

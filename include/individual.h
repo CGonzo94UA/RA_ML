@@ -45,7 +45,7 @@ public:
     /// <summary>
     /// Gets the fitness value of this Individual's chromosome.
     /// </summary>
-    int getFitness() const { return fitness; }
+    double getFitness() const { return fitness; }
     void setFitness(double fitness) { this->fitness = fitness; }
     MLP* getMLP() const { return mlp; }
     Individual* clone() const;

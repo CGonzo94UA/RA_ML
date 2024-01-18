@@ -1,11 +1,11 @@
 #include "genetic.h"
 
 int main(){
-    auto [X, Y] = Matrix::readFromCSV("datasets/3entradas.csv");
-    vector<int> topology = {3, 2, 1};
+    auto [X, Y] = Matrix::readFromCSV("datasets/7entradas.csv");
+    vector<int> topology = {7, 5, 3, 1};
 
     // crea un elemento de la clase Genetic
-    Genetic *genetic = new Genetic(5, Individual::createRandomIndividual, topology, X, Y);
+    Genetic *genetic = new Genetic(35, Individual::createRandomIndividual, topology, X, Y);
 
     // inicializa el algoritmo genetico
     genetic->initialize();
@@ -15,35 +15,39 @@ int main(){
     // std::cout << genetic->getIndividuals().size() << "\n";
 
     std::vector<Individual*> individuals = genetic->getIndividuals();
-    std::cout << "Pesos: " << "\n";
-    for (int i = 0; i < 5; i++) {
-        std::cout << "Individual " << i << std::endl;
-        // std::cout << individuals[i]->getFitness() << "\n";
-        for (int j = 0; j < individuals[i]->getMLP()->getWeights().size(); j++) {
-            std::cout << individuals[i]->getMLP()->getWeights()[j] << "\n";
-        }
-        std::cout << "------------------------------------" << "\n";
-    }
+    // std::cout << "Pesos: " << "\n";
+    // for (int i = 0; i < 5; i++) {
+    //     std::cout << "Individual " << i << std::endl;
+    //     // std::cout << individuals[i]->getFitness() << "\n";
+    //     for (int j = 0; j < individuals[i]->getMLP()->getWeights().size(); j++) {
+    //         std::cout << individuals[i]->getMLP()->getWeights()[j] << "\n";
+    //     }
+    //     std::cout << "------------------------------------" << "\n";
+    // }
 
-    std::cout << "=======================================" << "\n";
+    // std::cout << "=======================================" << "\n";
 
     // evoluciona el algoritmo genetico
-    for (int i = 0; i < 50; i++) {
+    for (int i = 0; i < 100; i++) {
         // imprime la generacion actual
         std::cout << "Generation: " << genetic->getGeneration() << "\n";
         genetic->evolve();
 
         individuals = genetic->getIndividuals();
 
-        std::cout << "Pesos: " << "\n";
-        for (int i = 0; i < 5; i++) {
-            std::cout << "Individual " << i << std::endl;
-            // std::cout << individuals[i]->getFitness() << "\n";
-            for (int j = 0; j < individuals[i]->getMLP()->getWeights().size(); j++) {
-                std::cout << individuals[i]->getMLP()->getWeights()[j] << "\n";
-            }
-            std::cout << "------------------------------------" << "\n";
-        }
+        // std::cout << "Pesos: " << "\n";
+        // for (int i = 0; i < 5; i++) {
+        //     std::cout << "Individual " << i << std::endl;
+        //     // std::cout << individuals[i]->getFitness() << "\n";
+        //     for (int j = 0; j < individuals[i]->getMLP()->getWeights().size(); j++) {
+        //         std::cout << individuals[i]->getMLP()->getWeights()[j] << "\n";
+        //     }
+        //     std::cout << "------------------------------------" << "\n";
+        // }
+
+        // print precision final
+        // if (i % 10 == 0)
+        std::cout << "Precision: " << individuals[0]->getFitness() << "\n";
 
         std::cout << "=======================================" << "\n";
     }

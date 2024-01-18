@@ -1,5 +1,6 @@
 #include "layer.h"
 #include "randonn_generator.h"
+#include "utils.h"
 
 using namespace std;
 
@@ -49,14 +50,16 @@ vector<double> NeuralNetworkLayer::feedForward() const {
     assert(activationFunction != nullptr && "The layer must have an activation function or there was an error while building");
     //cout << "Inputs: " << inputs.size() << " Esperados: " << _weights.rows() << endl;
     vector<double> outputs;
-    std::cout << "Neuronas: " << _weights.rows() << endl;
-    std::cout << "Entradas: " << _inputs.size() << endl;
+    // debug_msg_ln("Neuronas: " + _weights.rows(), 3);
+    // debug_msg_ln("Entradas: " + _inputs.size(), 3);
     for (size_t i = 0; i < _weights.rows(); i++) {
         double output = 0;
-        std::cout << "Neurona " << i << " num pesos: " << _weights[i].size() << endl;
+        // debug_msg("Neurona " + i, 3);
+        // debug_msg_ln("Num pesos: " + _weights[i].size(), 3);
         output += _weights[i][0];       // Bias
         for (size_t j = 1; j < _weights[i].size(); j++) {
-            std::cout << "i: " << i << " j: " << j << endl;
+            // debug_msg("i: " + i, 3);
+            // debug_msg_ln("j: " + j, 3);
             output += _weights[i][j] * _inputs[j-1];
         }
         

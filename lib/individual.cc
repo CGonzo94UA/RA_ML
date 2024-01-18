@@ -110,5 +110,7 @@ Individual* Individual::createRandomIndividual(vector<int> topology, const Matri
 }
 
 double Individual::calculateFitness(const Matrix& X, const Matrix& Y) {
-    return mlp->test(X, Y);
+    double acc = mlp->test(X, Y);
+    // std::cout << "Accuracy: " << acc << "\n";
+    return acc;
 }
