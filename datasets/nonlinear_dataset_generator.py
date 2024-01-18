@@ -6,26 +6,28 @@ import pandas as pd
 np.random.seed(42)
 
 # Definir el margen
-margen = 0.2
+margen = 0.5
+num_puntos = 400
+limite = 6
 
 # Clase 1: Puntos en el cuadrante superior izquierdo y cuadrante inferior derecho con margen
 class1_x = np.concatenate([
-    np.random.uniform(-1 + margen, -margen, 300),
-    np.random.uniform(margen, 1 - margen, 300)
+    np.random.uniform(-limite, -margen, num_puntos),
+    np.random.uniform(margen, limite, num_puntos)
 ])
 class1_y = np.concatenate([
-    np.random.uniform(margen, 1 - margen, 300),
-    np.random.uniform(-1 + margen, -margen, 300)
+    np.random.uniform(margen, limite, num_puntos),
+    np.random.uniform(-limite, -margen, num_puntos)
 ])
 
 # Clase 2: Puntos en el cuadrante superior derecho y cuadrante inferior izquierdo con margen
 class2_x = np.concatenate([
-    np.random.uniform(margen, 1 - margen, 300),
-    np.random.uniform(-1 + margen, -margen, 300)
+    np.random.uniform(margen, limite, num_puntos),
+    np.random.uniform(-limite, -margen, num_puntos)
 ])
 class2_y = np.concatenate([
-    np.random.uniform(margen, 1 - margen, 300),
-    np.random.uniform(-1 + margen, -margen, 300)
+    np.random.uniform(margen, limite, num_puntos),
+    np.random.uniform(-limite, -margen, num_puntos)
 ])
 
 
@@ -52,4 +54,6 @@ plt.title('Conjunto de Datos No Linealmente Separable')
 plt.xlabel('Característica 1')
 plt.ylabel('Característica 2')
 plt.legend()
-plt.show()
+#plt.show()
+
+plt.savefig('datasets/nonlinear_dataset.png')
