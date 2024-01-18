@@ -48,8 +48,8 @@ MLP_Builder buildVersicolor(){
 }
 
 int main(){
-    auto [X, Y] = Perceptron::readFromCSV("datasets/setosa_versicolor.csv");
-    int maxiter = 1000;
+    auto [X, Y] = Matrix::readFromCSV("datasets/xor.csv");
+    int maxiter = 100;
 
     p("Creating MLP");
     MLP_Builder builder = buildVersicolor();

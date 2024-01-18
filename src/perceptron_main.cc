@@ -18,7 +18,7 @@ std::string printVector(std::vector<T> const& v) {
 }
 
 int main(){
-    auto [X, Y] = Perceptron::readFromCSV("datasets/2entradas.csv");
+    auto [X, Y] = Matrix::readFromCSV("datasets/2entradas.csv");
     int maxiter = 100;
 
     Perceptron perceptron(X.cols());

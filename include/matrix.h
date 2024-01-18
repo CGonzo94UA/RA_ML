@@ -55,6 +55,8 @@ public:
     // Friend functions
     friend Matrix operator*(double, const Matrix&);
     friend std::ostream& operator<<(std::ostream&, const Matrix&);
+
+    static std::pair<Matrix, Matrix> readFromCSV(std::string const& filename);
     
 };
 

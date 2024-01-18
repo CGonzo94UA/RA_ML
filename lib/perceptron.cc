@@ -1,9 +1,8 @@
 #include "perceptron.h"
+#include "randonn_generator.h"
 #include <vector>
 #include <random>
 #include <algorithm>
-#include <fstream>
-#include <sstream>
 
 #define ITERATION_INFO 100
 
@@ -24,22 +23,19 @@ double sign(double x){
 }
 
 Matrix Perceptron::generateRandomWeights(std::size_t const num_weights){
-    std::random_device seed;
-	std::default_random_engine generator(seed());
-	std::uniform_real_distribution<double> distributionDouble(-.5, .5);
+    Randonn_generator generator;
     Matrix weights(num_weights, 1);
 
 	for (int i = 1; i < weights.size(); i++) {
-		weights[i][0] = distributionDouble(generator);
+		weights[i][0] = generator.randomDouble(-0.5, 0.5);
 	}
 
     return weights;
 }
 
 void Perceptron::train(Matrix const& X, Matrix const& Y, std::size_t const maxiter){
-    
-    std::default_random_engine generator;
-    std::uniform_int_distribution<int> distribution(0,X.rows()-1);
+    Randonn_generator generator;
+
     Matrix wBest(_weights.rows(), _weights.cols(), _weights.matrix());
     double bestAccuracy = 0.0;
 
@@ -73,11 +69,11 @@ void Perceptron::train(Matrix const& X, Matrix const& Y, std::size_t const maxit
         //The update rule is w(t + 1) = w(t) + y(t)x(t) . 
 
         // Pick a random example
-        size_t index = distribution(generator);
+        size_t index = generator.randomInt(0, X.rows() - 1);
 
         while (errors[index][0] != 1.0)
         {
-            index = distribution(generator);
+            index = generator.randomInt(0, X.rows() - 1);
         }
         //std::cout << "Index: " << index << std::endl;
         //std::cout << "Weights: " << _weights << std::endl;
@@ -104,53 +100,6 @@ double Perceptron::classify(const Matrix& input){
     Matrix predicted = product.apply(sign);
     //std::cout << "Predicted: " << predicted << std::endl;
     return predicted[0][0];
-}
-
-
-std::pair<Matrix, Matrix> Perceptron::readFromCSV(std::string const& filename){
-    // Rellenar y devolver matriz de prueba
-    std::ifstream file(filename);
-    std::string line;
-
-    std::vector<double> vectorX;
-    std::vector<double> vectorY;
-    std::size_t rowCount = 0;
-    size_t num_inputs = 0;
-
-    while (std::getline(file, line, '\n')) {
-        std::stringstream ss(line);
-        //std::cout << line << '\n';
-        std::vector<std::string> tokens;
-        
-        // Dividir la línea en tokens utilizando el delimitador ","
-        while (std::getline(ss, line, ',')) {
-            tokens.push_back(line);
-        }
-        num_inputs = tokens.size() -1;
-
-        // Leer los primeros 7 valores y colocar un 1 en la primera posición en el vectorX
-        vectorX.push_back(1.0);
-        for (std::size_t i = 0; i < tokens.size(); ++i) {
-            double value = std::stod(tokens[i]);
-            //std::cout << "Value "<< value << "\n";
-            if(i < num_inputs){
-                vectorX.push_back(value);
-            }else{
-                // Leer último valor en el vectorY
-                vectorY.push_back(value);
-            }
-            
-        }
-
-        // Incrementar el contador de filas
-        ++rowCount;
-    }
-
-    Matrix X{rowCount, num_inputs +1, vectorX};
-    Matrix Y{rowCount, 1, vectorY};
-    
-    return std::make_pair(X, Y);
-     
 }
 
 double Perceptron::test(Matrix const& X, Matrix const& Y) const{

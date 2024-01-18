@@ -23,12 +23,11 @@ MLP::MLP() {
 }
 
 MLP::~MLP() {
-    for (size_t i = 0; i < _layers.size(); i++) {
+    for (size_t i = 0; i < _layers.size(); ++i) {
         delete _layers[i];
     }
 
-    delete _inputLayer;
-    delete _outputLayer;
+    _layers.clear();
 }
 
 // ============================================
@@ -123,8 +122,43 @@ double MLP::test(const Matrix& testData, const Matrix& targetData) {
 
     Matrix predicted = output.apply(ActivationFunctions::binary);
     double numErrors = (predicted != targetData).sumcol(0);
-    return 1.0 - (numErrors / static_cast<double>(targetData.rows()));
+    double accuracy = 1.0 - (numErrors / static_cast<double>(targetData.rows()));
+    // std::cout << "Accuracy: " << accuracy << std::endl;
+    return accuracy;
     
+}
+
+vector<Matrix> MLP::getWeights() const {
+    vector<Matrix> weights;
+    // Obtiene los pesos de cada capa
+    for (size_t i = 0; i < _layers.size(); ++i) {
+        weights.push_back(_layers[i]->weights());
+    }
+
+    return weights;
+}
+
+void MLP::setWeights(const vector<Matrix>& weights) {
+    // Establece los pesos de cada capa
+    // std::cout << "Setting weights" << std::endl;
+    for (size_t i = 0; i < _layers.size(); ++i) {
+        // std::cout << "Layer: " << i << std::endl;
+        _layers[i]->setWeights(weights[i]);
+    }
+}
+
+MLP* MLP::clone() const {
+    // Clona la red
+    MLP_Builder builder;
+    builder.addLayer(_inputLayer->weights().rows(), _inputLayer->weights()[0].size() - 1, _inputLayer->activationFunction);
+    for (size_t i = 1; i < _layers.size(); ++i) {
+        builder.addLayer(_layers[i]->weights().rows(), _layers[i]->weights()[0].size() - 1, _layers[i]->activationFunction);
+    }
+
+    MLP* mlp = builder.build();
+    mlp->setWeights(getWeights());
+
+    return mlp;
 }
 
 void MLP::updateWeights(double learningRate) {

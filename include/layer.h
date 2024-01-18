@@ -14,13 +14,13 @@ using namespace std;
 class NeuralNetworkLayer{
     private:
         Matrix _weights;
-        double (*activationFunction)(double) = ActivationFunctions::sigmoid;
         vector<double> _gradients;
         vector<double> _outputs;
         vector<double> _signal;
         // double activationFunction(double const& x) const;
 
     public:
+        double (*activationFunction)(double) = ActivationFunctions::sigmoid;
         NeuralNetworkLayer(std::size_t const& width_of_layer, std::size_t const& num_weights); 
         NeuralNetworkLayer(std::size_t const& width_of_layer, std::size_t const& num_weights, double (*f)(double)); 
         ~NeuralNetworkLayer() {}

@@ -4,6 +4,8 @@
 #include <numeric>
 #include <random>
 #include <algorithm>
+#include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -293,4 +295,53 @@ ostream& operator<<(ostream& os, const Matrix& R) {
         os << endl;
     }
     return os;
+}
+
+
+
+
+std::pair<Matrix, Matrix> Matrix::readFromCSV(std::string const& filename){
+    // Rellenar y devolver matriz de prueba
+    std::ifstream file(filename);
+    std::string line;
+
+    std::vector<double> vectorX;
+    std::vector<double> vectorY;
+    std::size_t rowCount = 0;
+    size_t num_inputs = 0;
+
+    while (std::getline(file, line, '\n')) {
+        std::stringstream ss(line);
+        //std::cout << line << '\n';
+        std::vector<std::string> tokens;
+        
+        // Dividir la línea en tokens utilizando el delimitador ","
+        while (std::getline(ss, line, ',')) {
+            tokens.push_back(line);
+        }
+        num_inputs = tokens.size() -1;
+
+        // Leer los primeros 7 valores y colocar un 1 en la primera posición en el vectorX
+        vectorX.push_back(1.0);
+        for (std::size_t i = 0; i < tokens.size(); ++i) {
+            double value = std::stod(tokens[i]);
+            //std::cout << "Value "<< value << "\n";
+            if(i < num_inputs){
+                vectorX.push_back(value);
+            }else{
+                // Leer último valor en el vectorY
+                vectorY.push_back(value);
+            }
+            
+        }
+
+        // Incrementar el contador de filas
+        ++rowCount;
+    }
+
+    Matrix X{rowCount, num_inputs +1, vectorX};
+    Matrix Y{rowCount, 1, vectorY};
+    
+    return std::make_pair(X, Y);
+     
 }
