@@ -42,6 +42,8 @@ void MLP::setInputs(const vector<double>& inputs) {
     _inputs = inputs;
 }
 
+/// @brief Calculates the outputs of the MLP.
+/// @return The outputs of the MLP.
 vector<double> MLP::getOutputs() const {
     
     //Checks if _inputLayer is null and if _inputs is also null
@@ -65,6 +67,11 @@ vector<double> MLP::getInputs() const {
     return _inputs;
 }
 
+/// @brief Trains the MLP with the specified training data and target data.
+/// @param trainingData Matrix with the training data.
+/// @param targetData Matrix with the target data.
+/// @param epochs Number of epochs to train.
+/// @param learningRate Learning rate of the MLP.
 void MLP::train(const Matrix& trainingData, const Matrix& targetData, size_t epochs, double learningRate) {
     vector<double> output;
     vector<double> target;
@@ -102,7 +109,10 @@ void MLP::train(const Matrix& trainingData, const Matrix& targetData, size_t epo
     }
 }
 
-
+/// @brief Tests the MLP with the specified test data and target data.
+/// @param testData Matrix with the test data.
+/// @param targetData Matrix with the target data.
+/// @return The accuracy of the MLP.
 double MLP::test(const Matrix& testData, const Matrix& targetData) {
     Matrix output(testData.rows(), 1);
 
@@ -153,6 +163,8 @@ void MLP::setWeights(const vector<Matrix>& weights) {
     }
 }
 
+/// @brief Clones this instance of MLP.
+/// @return A pointer to the new MLP.
 MLP* MLP::clone() const {
     // Clona la red
     MLP_Builder builder;
@@ -167,6 +179,8 @@ MLP* MLP::clone() const {
     return mlp;
 }
 
+/// @brief Updates the weights of the MLP using the gradient descent.
+/// @param learningRate Learning rate of the MLP.
 void MLP::updateWeights(double learningRate) {
     // Actualiza los pesos de las capas ocultas y de salida utilizando el descenso de gradiente
 
@@ -179,6 +193,9 @@ void MLP::updateWeights(double learningRate) {
     }
 }
 
+/// @brief Performs the backpropagation to calculate the gradients.
+/// @param output The output of the layer.
+/// @param target The target result of the layer.
 void MLP::backpropagate(const vector<double>& output, const vector<double>& target) {
     vector<double> gradients;
     // Realiza el paso hacia atrás (backpropagation) para calcular los gradientes

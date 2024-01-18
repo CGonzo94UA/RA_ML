@@ -109,7 +109,7 @@ vector<double> Matrix::getRow(size_t row) const {
 /// @param ratio The ratio of the division
 /// @param shuffle If true, the matrix is shuffled before dividing
 /// @param seed The seed for the random number generator
-/// @return 
+/// @return A pair of matrices, the first one for training and the second one for testing
 pair<Matrix, Matrix> Matrix::divide(const double ratio, bool shuffle, unsigned seed) const {
     // Shuffle the matrix
     vector<vector<double>> shuffled = _matrix;
@@ -136,10 +136,10 @@ pair<Matrix, Matrix> Matrix::divide(const double ratio, bool shuffle, unsigned s
     return {train, test};
 }
 
-/// @brief 
-/// @param k 
-/// @param shuffle 
-/// @param seed 
+/// @brief Divides the matrix in k groups for k-fold cross validation
+/// @param k The number of folds
+/// @param shuffle If false, the matrix is not shuffled before dividing
+/// @param seed The seed for the random number generator
 /// @return A vector with the indices of the folds 
 vector<int> Matrix::kfold(const int k, bool shuffle, unsigned seed) const {
     vector<int> indices(_rows);
@@ -156,11 +156,12 @@ vector<int> Matrix::kfold(const int k, bool shuffle, unsigned seed) const {
     return indices;
 }
 
-/// @brief 
-/// @param folds 
-/// @param k
-/// @param i
-/// @return 
+/// @brief Divides the matrix in two matrices, one for training and one for testing
+/// based on the indices of the folds
+/// @param folds The indices of the folds, obtained with the kfold method
+/// @param k The number of folds
+/// @param i The index of the fold to get
+/// @return A pair of matrices, the first one for training and the second one for testing
 pair<Matrix, Matrix> Matrix::getFold(const vector<int> &folds, const int k, const int i) const {
     size_t trainSize = 0;
     size_t testSize = 0;
