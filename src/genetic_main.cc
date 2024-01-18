@@ -1,11 +1,14 @@
 #include "genetic.h"
 
 int main(){
-    auto [X, Y] = Matrix::readFromCSV("datasets/nonlinear_dataset.csv");
+    auto [X, Y] = Matrix::readFromCSV("datasets/xor2.csv");
     vector<int> topology = {2, 3, 1};
 
+    auto createIndividual = std::bind(&Individual::createRandomIndividual, topology, X, Y);
+    auto calculateFitness = std::bind(&Individual::calculateFitness, std::placeholders::_1, X, Y);
+
     // crea un elemento de la clase Genetic
-    Genetic *genetic = new Genetic(35, Individual::createRandomIndividual, topology, X, Y);
+    Genetic *genetic = new Genetic(35, createIndividual, calculateFitness);
 
     // inicializa el algoritmo genetico
     genetic->initialize();
@@ -16,7 +19,7 @@ int main(){
 
     std::vector<Individual*> individuals = genetic->getIndividuals();
     // std::cout << "Pesos: " << "\n";
-    // for (int i = 0; i < 5; i++) {
+    // for (int i = 0; i < individuals.size(); i++) {
     //     std::cout << "Individual " << i << std::endl;
     //     // std::cout << individuals[i]->getFitness() << "\n";
     //     for (int j = 0; j < individuals[i]->getMLP()->getWeights().size(); j++) {

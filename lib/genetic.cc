@@ -12,19 +12,13 @@
 // =============== Constructors ===============
 /// @brief Initializes a new instance of Genetic.
 /// @param population The size of the population.
-/// @param createRandomIndividual The function to create a random individual.
-/// @param topology The topology of the MLP.
-/// @param X The input matrix.
-/// @param Y The classes matrix.
+/// @param createIndividual The function to create an individual.
 Genetic::Genetic(int population, 
-    std::function<Individual*(vector<int>, const Matrix& X, const Matrix& Y)> createRandomIndividual, 
-    vector<int> topology, const Matrix& X, const Matrix& Y)
+    std::function<Individual*()> createIndividual, std::function<double(Individual*)> calculateFitness)
 {
     this->population = population;
-    this->createRandomIndividual = createRandomIndividual;
-    this->topology = topology;
-    this->X = X;
-    this->Y = Y;
+    this->createIndividual = createIndividual;
+    this->calculateFitness = calculateFitness;
     this->generation = 1;
 }
 
@@ -51,17 +45,17 @@ void Genetic::initialize()
     
     for(int i =0;i<population;i++)
     { 
-        individuals[i] = createRandomIndividual(this->topology, X, Y);
+        individuals[i] = createIndividual();
     }
 }
 
 /// @brief Updates the genetic algorithm by evolving the population
 void Genetic::evolve()
 {
-    // std::vector<Individual*> best = bestIndividuals();
-    // std::cout << "Generation " << generation << std::endl;
     std::vector<Individual*> nextGen = nextGeneration();
     
+    std::cout << "Best fitness: " << individuals[0]->getFitness() << std::endl;
+
     for(int i = 0; i < individuals.size();i++)
     {
         // std::cout << "Individual " << i << " fitness: " << individuals[i]->getFitness() << std::endl;
@@ -70,15 +64,8 @@ void Genetic::evolve()
     }
     
     individuals.clear();
-    
-    individuals = nextGen;
-    
-    // for(int i = 0; i < best.size();i++)
-    // {
-    //     individuals.push_back(best[i]);
-    // }
-    
-    generation++;
+    individuals = nextGen;    
+    ++generation;
 }
 
 /// @brief Gets the best individuals of the population
@@ -107,7 +94,7 @@ std::vector<Individual*> Genetic::nextGeneration(double n)
 {
     // getting the best individuals
     std::vector<Individual*> nextGen = bestIndividuals(n);
-    
+
     // generating the rest of the population
     // based on the best individuals
     for(int i = 0; i < individuals.size() * (1 - n); ++i)
@@ -117,7 +104,7 @@ std::vector<Individual*> Genetic::nextGeneration(double n)
         int r2 = generator.randomInt(0, individuals.size() * n);
 
         Individual* child = individuals[r]->mate(*individuals[r2]);
-        double fitness = child->calculateFitness(X, Y);
+        double fitness = calculateFitness(child);
         child->setFitness(fitness);
         nextGen.push_back(child);
     }

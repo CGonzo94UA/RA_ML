@@ -10,8 +10,7 @@ class Genetic
 {
 public:
     Genetic(int population, 
-        std::function<Individual*(vector<int>, const Matrix& X, const Matrix& Y)> createRandomIndividual, 
-        vector<int> topology, const Matrix& X, const Matrix& Y);
+        std::function<Individual*()> createIndividual, std::function<double(Individual*)> calculateFitness);
     ~Genetic();
     void initialize();
     void evolve();
@@ -22,7 +21,8 @@ public:
 private:
     Randonn_generator generator;
 
-    std::function<Individual*(vector<int>, const Matrix& X, const Matrix& Y)> createRandomIndividual;
+    std::function<Individual*()> createIndividual;
+    std::function<double(Individual*)> calculateFitness;
     vector<int> topology;
     Matrix X;
     Matrix Y;
