@@ -93,9 +93,9 @@ std::vector<Individual*> Genetic::bestIndividuals(double n)
         return a->getFitness() > b->getFitness();
     });
     
-    for(int i = 0; i < individuals.size() * n;i++)
+    for(int i = 0; i < individuals.size() * n; ++i)
     {
-        best.push_back(individuals[i]);
+        best.push_back(individuals[i]->clone());
     }
     
     return best;
@@ -105,42 +105,22 @@ std::vector<Individual*> Genetic::bestIndividuals(double n)
 /// @return The next generation of the population
 std::vector<Individual*> Genetic::nextGeneration(double n)
 {
-    std::vector<Individual*> nextGen;
+    // getting the best individuals
+    std::vector<Individual*> nextGen = bestIndividuals(n);
     
-    // std::cout << "Sorting" << std::endl;
-    std::sort(individuals.begin(), individuals.end(), [](Individual* a, Individual* b) -> bool
-    {
-        return a->getFitness() > b->getFitness();
-    });
-    
-    // std::cout << "Best individuals" << std::endl;
-    for(int i = 0; i < individuals.size() * n; ++i)
-    {
-        // std::cout << "Best individual " << i << " fitness: " << individuals[i]->getFitness() << std::endl;
-        nextGen.push_back(individuals[i]->clone());
-    }
-    
-    // std::cout << "Mating" << std::endl;
+    // generating the rest of the population
+    // based on the best individuals
     for(int i = 0; i < individuals.size() * (1 - n); ++i)
     {
+        // random mating
         int r = generator.randomInt(0, individuals.size() * n);
         int r2 = generator.randomInt(0, individuals.size() * n);
 
-        // std::cout << "Mating " << r << " and " << r2 << std::endl;
         Individual* child = individuals[r]->mate(*individuals[r2]);
-        // std::cout << "Child fitness: " << child->getFitness() << std::endl;
         double fitness = child->calculateFitness(X, Y);
         child->setFitness(fitness);
-        // std::cout << "Child fitness: " << child->getFitness() << std::endl;
-
-        // std::cout << "Child created" << std::endl;
         nextGen.push_back(child);
     }
-
-    // for (int i = 0; i < 5; ++i)
-    // {
-    //     std::cout << "BEST NEXT GENERATION Individual " << i << " fitness: " << nextGen[i]->getFitness() << std::endl;
-    // }
     
     return nextGen;
 }
