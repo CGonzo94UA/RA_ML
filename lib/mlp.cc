@@ -51,6 +51,8 @@ vector<double> MLP::getOutputs() const {
     
     vector<double> outputs = _inputLayer->feedForward();
 
+    std::cout << "FeedForwarding" << std::endl;
+
     // Send the outputs of each layer to the next layer
     for (size_t i = 1; i < _layers.size(); i++) {
         _layers[i]->setInputs(outputs);
@@ -149,14 +151,6 @@ void MLP::setWeights(const vector<Matrix>& weights) {
         // std::cout << "Layer: " << i << std::endl;
         _layers[i]->setWeights(weights[i]);
     }
-}
-
-int MLP::getPuntuacion() const {
-    // random number
-    int puntuacion = 0;
-    puntuacion = rand() % 100;
-
-    return puntuacion;
 }
 
 MLP* MLP::clone() const {

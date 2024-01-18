@@ -49,10 +49,15 @@ vector<double> NeuralNetworkLayer::feedForward() const {
     assert(activationFunction != nullptr && "The layer must have an activation function or there was an error while building");
     //cout << "Inputs: " << inputs.size() << " Esperados: " << _weights.rows() << endl;
     vector<double> outputs;
+    std::cout << "Neuronas: " << _weights.rows() << endl;
+    std::cout << "Entradas: " << _inputs.size() << endl;
     for (size_t i = 0; i < _weights.rows(); i++) {
         double output = 0;
-        for (size_t j = 0; j < _weights[i].size(); j++) {
-            output += _weights[i][j] * _inputs[j];
+        std::cout << "Neurona " << i << " num pesos: " << _weights[i].size() << endl;
+        output += _weights[i][0];       // Bias
+        for (size_t j = 1; j < _weights[i].size(); j++) {
+            std::cout << "i: " << i << " j: " << j << endl;
+            output += _weights[i][j] * _inputs[j-1];
         }
         
         outputs.push_back(activationFunction(output));

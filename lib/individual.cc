@@ -78,9 +78,6 @@ Individual* Individual::mate(const Individual &par2, double mutationChance)
     // std::cout << "setting weights" << std::endl;
     child->mlp->setWeights(childWeights);
 
-    // std::cout << "getting puntuacion" << std::endl;
-    child->setFitness(child->mlp->getPuntuacion());
-
     return child;
 }
 
@@ -93,3 +90,25 @@ Individual* Individual::clone() const
 }
 
 Randonn_generator Individual::generator = Randonn_generator();
+
+Individual* Individual::createRandomIndividual(vector<int> topology, const Matrix& X, const Matrix& Y)
+{
+    MLP_Builder builder = MLP_Builder();
+    // topology es un vector de enteros que contiene el numero de neuronas de cada capa
+    // el primer valor es el numero de neuronas de la capa de entrada
+    // los siguientes valores son el numero de neuronas de las capas ocultas
+    for (int i = 1; i < topology.size(); i++) {
+        builder.addLayer(topology[i], topology[i-1]);
+    }
+
+    MLP* mlp = builder.build();
+
+    Individual* ind = new Individual(mlp);
+    ind->setFitness(ind->calculateFitness(X, Y));
+
+    return ind;
+}
+
+double Individual::calculateFitness(const Matrix& X, const Matrix& Y) {
+    return mlp->test(X, Y);
+}

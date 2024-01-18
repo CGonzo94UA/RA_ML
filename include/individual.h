@@ -15,7 +15,7 @@ private:
     /// <summary>
     /// The fitness of this individual.
     /// </summary>
-	int fitness; 
+	double fitness; 
 
     static Randonn_generator generator;
     
@@ -46,12 +46,12 @@ public:
     /// Gets the fitness value of this Individual's chromosome.
     /// </summary>
     int getFitness() const { return fitness; }
-
-    void setFitness(int fitness) { this->fitness = fitness; }
-
+    void setFitness(double fitness) { this->fitness = fitness; }
     MLP* getMLP() const { return mlp; }
-
     Individual* clone() const;
+    static Individual* createRandomIndividual(vector<int> topology, const Matrix& X, const Matrix& Y);
+    double calculateFitness(const Matrix& X, const Matrix& Y);
+
 };
 
 #endif

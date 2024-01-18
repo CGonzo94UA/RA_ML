@@ -2,10 +2,15 @@
 #include "individual.h"
 #include "mlp.h"
 
-Genetic::Genetic(int population, std::function<Individual*()> createRandomIndividual)
+Genetic::Genetic(int population, 
+    std::function<Individual*(vector<int>, const Matrix& X, const Matrix& Y)> createRandomIndividual, 
+    vector<int> topology, const Matrix& X, const Matrix& Y)
 {
     this->population = population;
     this->createRandomIndividual = createRandomIndividual;
+    this->topology = topology;
+    this->X = X;
+    this->Y = Y;
     this->generation = 1;
 }
 
@@ -27,9 +32,10 @@ void Genetic::initialize()
     individuals.clear();
     individuals.resize(population);
     
+    std::cout << "Creating random individuals" << std::endl;
     for(int i =0;i<population;i++)
     { 
-        individuals[i] = createRandomIndividual();
+        individuals[i] = createRandomIndividual(this->topology, X, Y);
     }
 }
 
@@ -106,6 +112,8 @@ std::vector<Individual*> Genetic::nextGeneration(double n)
 
         // std::cout << "Mating " << r << " and " << r2 << std::endl;
         Individual* child = individuals[r]->mate(*individuals[r2]);
+        child->setFitness(child->calculateFitness(X, Y));
+
         // std::cout << "Child created" << std::endl;
         nextGen.push_back(child);
     }
