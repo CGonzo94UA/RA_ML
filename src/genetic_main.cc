@@ -2,7 +2,7 @@
 
 int main(){
     auto [X, Y] = Matrix::readFromCSV("datasets/7entradas.csv");
-    vector<int> topology = {7, 5, 3, 1};
+    vector<int> topology = {7, 7, 5, 3, 1};
 
     // crea un elemento de la clase Genetic
     Genetic *genetic = new Genetic(35, Individual::createRandomIndividual, topology, X, Y);
