@@ -388,12 +388,14 @@ void MLP_Display::display(MLP const& mlp) {
     //cout << "Weights: " << endl;
     cout << mlp._outputLayer->weights() << endl;
 
-    cout << "MLP output: "  << endl;
-    std::vector<double> outputs = mlp.getOutputs();
-    for (size_t i = 0; i < outputs.size(); ++i)
-    {
-        cout << outputs[i] << " ";
+    if (mlp._inputs.size() > 0) {
+        cout << "MLP output: "  << endl;
+        std::vector<double> outputs = mlp.getOutputs();
+        for (size_t i = 0; i < outputs.size(); ++i)
+        {
+            cout << outputs[i] << " ";
+        }
+        cout << endl;
     }
-    cout << endl;
     
 }

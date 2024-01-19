@@ -1,7 +1,7 @@
 #include "genetic.h"
 
 int main(){
-    auto [X, Y] = Matrix::readFromCSV("datasets/xor.csv");
+    auto [X, Y] = Matrix::readFromCSV("datasets/xor2.csv");
     vector<int> topology = {2, 3, 1};
 
     auto createIndividual = std::bind(&Individual::createRandomIndividual, topology, X, Y);
@@ -34,7 +34,7 @@ int main(){
     mlp->setWeights(weights);*/
 
     // evoluciona el algoritmo genetico
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 10; i++) {
         // imprime la generacion actual
         std::cout << "Generation: " << genetic->getGeneration() << "\n";
         genetic->evolve();
@@ -47,6 +47,8 @@ int main(){
     }
 
     mlp = individuals[0]->getMLP();
+    mlp->setInputs(X[0]);
+    std::cout << "MLP inputs " << mlp->getInputs().size() << "\n";
     MLP_Display::display(*mlp);
 
     delete genetic;
