@@ -31,6 +31,14 @@ MLP_Builder buildXOR(){
     return builder;
 }
 
+MLP_Builder buildXOR2(){
+    MLP_Builder builder = MLP_Builder();
+    builder.addLayer(2, 2);
+    builder.addLayer(2, 2);
+    builder.addLayer(1, 2);
+    return builder;
+}
+
 MLP_Builder build7entradas(){
     MLP_Builder builder = MLP_Builder();
     builder.addLayer(7, 7);
@@ -67,11 +75,12 @@ MLP_Builder build128entradas(){
 }
 
 int main(){
-    auto [X, Y] = Matrix::readFromCSV("datasets/xor.csv");
-    int maxiter = 100;
+    auto [X, Y] = Matrix::readFromCSV("datasets/xor2.csv");
+    int maxiter = 1000;
+
 
     p("Creating MLP");
-    MLP_Builder builder = buildXOR();
+    MLP_Builder builder = buildXOR2();
 
     p("Building MLP");
     MLP* mlp = builder.build();
@@ -79,7 +88,7 @@ int main(){
     // MLP_Display::display(*mlp);
 
     p("Training MLP");
-    mlp->train(X, Y, maxiter, 0.1);
+    mlp->train(X, Y, maxiter, 69420);
 
     // MLP_Display::display(*mlp);
 

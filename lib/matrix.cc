@@ -322,7 +322,7 @@ std::pair<Matrix, Matrix> Matrix::readFromCSV(std::string const& filename){
         num_inputs = tokens.size() -1;
 
         // Leer los primeros 7 valores y colocar un 1 en la primera posición en el vectorX
-        vectorX.push_back(1.0);
+        //vectorX.push_back(1.0);
         for (std::size_t i = 0; i < tokens.size(); ++i) {
             double value = std::stod(tokens[i]);
             //std::cout << "Value "<< value << "\n";
@@ -339,7 +339,8 @@ std::pair<Matrix, Matrix> Matrix::readFromCSV(std::string const& filename){
         ++rowCount;
     }
 
-    Matrix X{rowCount, num_inputs +1, vectorX};
+    //Matrix X{rowCount, num_inputs +1, vectorX};
+    Matrix X{rowCount, num_inputs, vectorX};
     Matrix Y{rowCount, 1, vectorY};
     
     return std::make_pair(X, Y);

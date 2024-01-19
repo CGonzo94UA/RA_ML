@@ -30,14 +30,15 @@ void NeuralNetworkLayer::generateRandomWeights(size_t const& width_of_layer, siz
     // Randomly initiate weights of each neuron in the layer, adding one for the bias
     Randonn_generator generator;
 
-    // For each neuron in the layer (width_of_layer) generate num_weights+1 random weights (num_weights + 1 for the bias) where the bias is the first element of each neuron and has a value of 1
+    // For each neuron in the layer (width_of_layer) generate num_weights+1 random weights (num_weights + 1 for the bias) where the bias is the first element of each neuron
     for (size_t i = 0; i < width_of_layer; i++) {
         for (size_t j = 0; j < num_weights+1; j++) {
-            if (j == 0) {
-                _weights[i][j] = 1.0;
-            } else {
-                _weights[i][j] = generator.randomDouble(-0.5, 0.5);
-            }
+            // if (j == 0) {
+            //     _weights[i][j] = 1.0;
+            // } else {
+            //     _weights[i][j] = generator.randomDouble(-0.5, 0.5);
+            // }
+            _weights[i][j] = generator.randomDouble(-0.5, 0.5);
         }
     }
 
@@ -51,26 +52,26 @@ vector<double> NeuralNetworkLayer::feedForward(const vector<double>& output_aux)
     vector<double> outputs;
     vector<double> signals;
     //#if DEBUG == 1
-        cout << "Starting feed forward of layer _weigths.size = " << _weights.size() << " input.size = " << output_aux.size()  << endl;
+        //cout << "Starting feed forward of layer _weigths.size = " << _weights.size() << " input.size = " << output_aux.size()  << endl;
     //#endif
     for (size_t i = 0; i < _weights.rows(); i++) {
 
         double output = 0;
         output += _weights[i][0];
         //#if DEBUG == 1
-            cout << "Neuron: " << i+1 << "/" << _weights.rows() << endl;
-            cout << "Starting output: " << output << " (JUST BIAS)" << endl;
+            //cout << "Neuron: " << i+1 << "/" << _weights.rows() << endl;
+            //cout << "Starting output: " << output << " (JUST BIAS)" << endl;
         //#endif
         for (size_t j = 1; j < _weights[i].size(); j++) {
             output += _weights[i][j] * output_aux[j-1];
             //#if DEBUG == 1
-                cout << "output: " << output << " (WEIGHT: " << _weights[i][j] << " INPUT: " << output_aux[j-1] << ")" << endl;
+                //cout << "output: " << output << " (WEIGHT: " << _weights[i][j] << " INPUT: " << output_aux[j-1] << ")" << endl;
             //#endif
         }
         outputs.push_back(activationFunction(output));
-        signals.push_back(outputs[outputs.size()-1]);
+        signals.push_back(output);
         //#if DEBUG == 1
-            cout << "Final output: " << output << " (ACTIVATION: " << outputs[outputs.size()-1] << ")" << endl;
+            //cout << "Final output: " << output << " (ACTIVATION: " << outputs[outputs.size()-1] << ")" << endl;
         //#endif
     }
     setSignals(signals);
@@ -139,6 +140,7 @@ void NeuralNetworkLayer::updateWeights(const double learningRate, const vector<d
     // Update the weights by subtracting the gradient from the old weights by the learning rate by the output of the previous layer
     //cout << "Gradients size: " << _gradients.size() << " outputs size: " << outputs.size() << " _weights.rows = " << _weights.rows() << " _weights.cols() = " << _weights.cols()<< endl;
     for (size_t i = 0; i < _weights.rows(); ++i) {
+        _weights[i][0] -= learningRate * _gradients[i];
         for (size_t j = 1; j < _weights[i].size(); ++j) {
             _weights[i][j] -= learningRate * _gradients[i] * outputs[j-1];
         }

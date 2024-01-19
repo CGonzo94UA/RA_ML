@@ -35,7 +35,7 @@ MLP::~MLP() {
 
 void MLP::setInputs(const vector<double>& inputs) {
     //cout << "Inputs: " << inputs.size() << " Esperados: " << _inputLayer->weights()[0].size()-1 << endl;
-    if (inputs.size() != _inputLayer->weights()[0].size()) {
+    if (inputs.size() != _inputLayer->weights()[0].size()-1) {
         throw invalid_argument("Number of inputs does not match the number of neurons in the input layer");
     }
 
@@ -70,6 +70,8 @@ void MLP::train(const Matrix& trainingData, const Matrix& targetData, size_t epo
     assert(_inputLayer != nullptr && "La MLP debe tener una capa de entrada o hubo un error durante la construcción");
     assert(_outputLayer != nullptr && "La MLP debe tener una capa de salida o hubo un error durante la construcción");
     assert(_layers.size() > 1 && "La MLP debe tener al menos una capa oculta o hubo un error durante la construcción");
+
+    //Matrix trainingData = t_Data.di;
 
     #if DEBUG == 1
         cout << "Training for " << epochs << " epochs" << endl;
