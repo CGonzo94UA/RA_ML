@@ -50,14 +50,28 @@ vector<double> NeuralNetworkLayer::feedForward(const vector<double>& output_aux)
     assert(activationFunction != nullptr && "The layer must have an activation function or there was an error while building");
     vector<double> outputs;
     vector<double> signals;
+    //#if DEBUG == 1
+        cout << "Starting feed forward of layer _weigths.size = " << _weights.size() << " input.size = " << output_aux.size()  << endl;
+    //#endif
     for (size_t i = 0; i < _weights.rows(); i++) {
+
         double output = 0;
         output += _weights[i][0];
+        //#if DEBUG == 1
+            cout << "Neuron: " << i+1 << "/" << _weights.rows() << endl;
+            cout << "Starting output: " << output << " (JUST BIAS)" << endl;
+        //#endif
         for (size_t j = 1; j < _weights[i].size(); j++) {
             output += _weights[i][j] * output_aux[j-1];
+            //#if DEBUG == 1
+                cout << "output: " << output << " (WEIGHT: " << _weights[i][j] << " INPUT: " << output_aux[j-1] << ")" << endl;
+            //#endif
         }
-        signals.push_back(output);
         outputs.push_back(activationFunction(output));
+        signals.push_back(outputs[outputs.size()-1]);
+        //#if DEBUG == 1
+            cout << "Final output: " << output << " (ACTIVATION: " << outputs[outputs.size()-1] << ")" << endl;
+        //#endif
     }
     setSignals(signals);
     return outputs;
@@ -108,7 +122,7 @@ vector<double> NeuralNetworkLayer::calculateGradientsMedio(const vector<double>&
     for (size_t i = 0; i < _signal.size(); ++i) {
         activationDerivative.push_back(ActivationFunctions::sigmoid_prime(_signal[i]));
     }
-    //cout << "HOLIWI -- NextLayerGradients.size = " << nextLayerGradients.size() << " activationDerivative.size = " << activationDerivative.size() << " _gradients.size = " << _gradients.size() << " weights_rows = " << weights.rows() << " weights_cols = " << weights.cols() << endl;
+    
     // Multiply the gradients of the next layer by the weights of the next layer and multiply them by the activation function
     for (size_t i = 0; i < _gradients.size(); ++i) {
         _gradients[i] = 0.0;

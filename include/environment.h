@@ -4,4 +4,4 @@
 // | 2: debug mlp test     |
 // | 3: debug feed forward |
 // +=======================+
-#define DEBUG 2
+#define DEBUG 2 || 3

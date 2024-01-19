@@ -67,11 +67,11 @@ MLP_Builder build128entradas(){
 }
 
 int main(){
-    auto [X, Y] = Matrix::readFromCSV("datasets/128entradas.csv");
+    auto [X, Y] = Matrix::readFromCSV("datasets/xor.csv");
     int maxiter = 100;
 
     p("Creating MLP");
-    MLP_Builder builder = build128entradas();
+    MLP_Builder builder = buildXOR();
 
     p("Building MLP");
     MLP* mlp = builder.build();
