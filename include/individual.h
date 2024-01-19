@@ -38,7 +38,7 @@ public:
     /// ================
     /// Creates a new Individual resulting of the combination of this instance and another Individual.
     /// ================
-	Individual* mate(const Individual &parent2, double mutationChance = 0.); 
+	Individual* mate(const Individual &parent2, double mutationChance = 0.95); 
 
     /// ================
     /// Gets the fitness value of this Individual's chromosome.

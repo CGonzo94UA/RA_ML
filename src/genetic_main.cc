@@ -1,7 +1,7 @@
 #include "genetic.h"
 
 int main(){
-    auto [X, Y] = Matrix::readFromCSV("datasets/xor2.csv");
+    auto [X, Y] = Matrix::readFromCSV("datasets/xor.csv");
     vector<int> topology = {2, 3, 1};
 
     auto createIndividual = std::bind(&Individual::createRandomIndividual, topology, X, Y);
@@ -18,17 +18,20 @@ int main(){
     // std::cout << genetic->getIndividuals().size() << "\n";
 
     std::vector<Individual*> individuals = genetic->getIndividuals();
-    // std::cout << "Pesos: " << "\n";
-    // for (int i = 0; i < individuals.size(); i++) {
-    //     std::cout << "Individual " << i << std::endl;
-    //     // std::cout << individuals[i]->getFitness() << "\n";
-    //     for (int j = 0; j < individuals[i]->getMLP()->getWeights().size(); j++) {
-    //         std::cout << individuals[i]->getMLP()->getWeights()[j] << "\n";
-    //     }
-    //     std::cout << "------------------------------------" << "\n";
-    // }
 
-    // std::cout << "=======================================" << "\n";
+    std::cout << "=======================================" << "\n";
+    MLP* mlp = individuals[0]->getMLP();
+    MLP_Display::display(*mlp);
+    std::cout << "=======================================" << "\n";
+
+    //Set weights
+    /*
+    std::vector<double> weights1 = {1.1,  -0.81, 0.65};
+    Matrix Matrix1()
+    std::vector<double> weights2 = {1., 1.9, -0.18};
+    std::vector<double> weights3 = {6.3, -4.6, -6.1};
+    const std::vector<Matrix>& weights();
+    mlp->setWeights(weights);*/
 
     // evoluciona el algoritmo genetico
     for (int i = 0; i < 100; i++) {
@@ -38,24 +41,13 @@ int main(){
 
         individuals = genetic->getIndividuals();
 
-        // std::cout << "Pesos: " << "\n";
-        // for (int i = 0; i < 5; i++) {
-        //     std::cout << "Individual " << i << std::endl;
-        //     // std::cout << individuals[i]->getFitness() << "\n";
-        //     for (int j = 0; j < individuals[i]->getMLP()->getWeights().size(); j++) {
-        //         std::cout << individuals[i]->getMLP()->getWeights()[j] << "\n";
-        //     }
-        //     std::cout << "------------------------------------" << "\n";
-        // }
-
-        // print precision final
-        // if (i % 10 == 0)
         std::cout << "Precision: " << individuals[0]->getFitness() << "\n";
 
         std::cout << "=======================================" << "\n";
     }
 
-
+    mlp = individuals[0]->getMLP();
+    MLP_Display::display(*mlp);
 
     delete genetic;
 

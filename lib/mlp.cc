@@ -374,17 +374,26 @@ MLP* MLP_Builder::build(string filename) {
 
 // Displays the MLP
 void MLP_Display::display(MLP const& mlp) {
-    cout << "Input layer: " << endl;
-    cout << "Weights: " << endl;
+    cout << "Input layer weights: " << endl;
+    //cout << "Weights: " << endl;
     cout << mlp._inputLayer->weights() << endl;
 
-    for (size_t i = 1; i < mlp._layers.size()-1; i++) {
+    for (size_t i = 1; i < mlp._layers.size()-1; ++i) {
         cout << "Hidden layer " << i+1 << ": " << endl;
         cout << "Weights of neurons (each line is a different neuron): " << endl;
         cout << mlp._layers[i]->weights() << endl;
     }
 
-    cout << "Output layer: " << endl;
-    cout << "Weights: " << endl;
+    cout << "Output layer weights: " << endl;
+    //cout << "Weights: " << endl;
     cout << mlp._outputLayer->weights() << endl;
+
+    cout << "MLP output: "  << endl;
+    std::vector<double> outputs = mlp.getOutputs();
+    for (size_t i = 0; i < outputs.size(); ++i)
+    {
+        cout << outputs[i] << " ";
+    }
+    cout << endl;
+    
 }

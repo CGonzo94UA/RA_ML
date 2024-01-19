@@ -363,7 +363,7 @@ Matrix operator*(double c, const Matrix& R) {
 /// @brief Prints the matrix
 ostream& operator<<(ostream& os, const Matrix& R) {
     // start in a new line
-    os << "\n";
+    //os << "\n";
     for (size_t i = 0; i < R._rows; i++) {
         for (size_t j = 0; j < R._cols; j++)
             os << R[i][j] << " ";

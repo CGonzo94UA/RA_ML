@@ -54,7 +54,7 @@ void Genetic::evolve()
 {
     std::vector<Individual*> nextGen = nextGeneration();
     
-    std::cout << "Best fitness: " << individuals[0]->getFitness() << std::endl;
+    //std::cout << "Best fitness: " << individuals[0]->getFitness() << std::endl;
 
     for(int i = 0; i < individuals.size();i++)
     {
@@ -90,20 +90,20 @@ std::vector<Individual*> Genetic::bestIndividuals(double n)
 
 /// @brief Gets the next generation of the population
 /// @return The next generation of the population
-std::vector<Individual*> Genetic::nextGeneration(double n)
+std::vector<Individual*> Genetic::nextGeneration(double mutationRate)
 {
     // getting the best individuals
-    std::vector<Individual*> nextGen = bestIndividuals(n);
+    std::vector<Individual*> best = bestIndividuals();
+    std::vector<Individual*> nextGen(best);
 
-    // generating the rest of the population
-    // based on the best individuals
-    for(int i = 0; i < individuals.size() * (1 - n); ++i)
+    // generating the rest of the population based on the best individuals
+    for(int i = nextGen.size(); i < individuals.size(); ++i)
     {
-        // random mating
-        int r = generator.randomInt(0, individuals.size() * n);
-        int r2 = generator.randomInt(0, individuals.size() * n);
+        // random mating between 2 of the best individuals
+        int r = generator.randomInt(0, best.size()-1);
+        int r2 = generator.randomInt(0, best.size()-1);
 
-        Individual* child = individuals[r]->mate(*individuals[r2]);
+        Individual* child = best[r]->mate(*best[r2]);
         double fitness = calculateFitness(child);
         child->setFitness(fitness);
         nextGen.push_back(child);
