@@ -30,7 +30,7 @@ int main(){
     p("Creating MLP");
     MLP_Builder builder = MLP_Builder();
     builder.addLayer(3, 2);
-    builder.addLayer(1, 2);
+    builder.addLayer(1, 3);
     // builder.addLayer(128, 128);         // First layer
     // builder.addLayer(64, 64);           // Second layer
     // builder.addLayer(1, 1);             // Third layer (output layer)
@@ -47,6 +47,8 @@ int main(){
 
     p("Testing MLP");
     std::cout << "Accuracy: " << mlp->test(X, Y) << "\n";
+
+    delete mlp;
 
     return 0;
 }

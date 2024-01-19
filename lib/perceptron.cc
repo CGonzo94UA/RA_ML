@@ -2,9 +2,12 @@
 #include "randonn_generator.h"
 #include "functions.h"
 #include "environment.h"
+#include "matrix.h"
 #include <vector>
 #include <random>
 #include <algorithm>
+#include <fstream>
+#include <sstream>
 
 #define ITERATION_INFO 100
 
@@ -127,4 +130,55 @@ double Perceptron::test(Matrix const& X, Matrix const& Y) const{
     double numErrors = errors.sumcol(0);
     double accuracy = 1.0 - (numErrors / static_cast<double>(Y.rows()));
     return accuracy;
+}
+
+// ============================================
+// =============== Static methods ==============
+/// @brief Creates a pair of matrices from a CSV file
+std::pair<Matrix, Matrix> Perceptron::readFromCSV(std::string const& filename){
+    std::ifstream file(filename);
+    std::string line;
+
+    std::vector<double> vectorX;
+    std::vector<double> vectorY;
+    std::size_t rowCount = 0;
+    size_t num_inputs = 0;
+
+    while (std::getline(file, line, '\n')) {
+        std::stringstream ss(line);
+        //std::cout << line << '\n';
+        std::vector<std::string> tokens;
+        
+        // Dividir la línea en tokens utilizando el delimitador ","
+        while (std::getline(ss, line, ',')) {
+            tokens.push_back(line);
+        }
+        num_inputs = tokens.size() -1;
+
+        // Leer los valores de los tokens
+        // Hasta num_inputs para la X
+        // El ultimo valor para la Y
+        vectorX.push_back(1.0);
+        for (std::size_t i = 0; i < tokens.size(); ++i) {
+            double value = std::stod(tokens[i]);
+            //std::cout << "Value "<< value << "\n";
+            if(i < num_inputs){
+                vectorX.push_back(value);
+            }else{
+                // Leer ultimo valor en el vectorY
+                vectorY.push_back(value);
+            }
+            
+        }
+
+        // Incrementar el contador de filas
+        ++rowCount;
+    }
+
+    Matrix X{rowCount, num_inputs +1, vectorX};
+    // Matrix X{rowCount, num_inputs, vectorX};
+    Matrix Y{rowCount, 1, vectorY};
+    
+    return std::make_pair(X, Y);
+     
 }

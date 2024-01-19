@@ -25,16 +25,20 @@ int main(){
     std::cout << "=======================================" << "\n";
 
     //Set weights
-    /*
-    std::vector<double> weights1 = {1.1,  -0.81, 0.65};
-    Matrix Matrix1()
-    std::vector<double> weights2 = {1., 1.9, -0.18};
-    std::vector<double> weights3 = {6.3, -4.6, -6.1};
-    const std::vector<Matrix>& weights();
-    mlp->setWeights(weights);*/
+    
+    // std::vector<double> w1 = {4.4,  -0.80, 1.3};
+    // Matrix Matrix1(1, 3, w1);
+    // std::vector<double> w2 = {2.6, -2, -0.6};
+    // Matrix Matrix2(1, 3, w2);
+    // std::vector<double> w3 = {3.4, 0.54, 1.2};
+    // Matrix Matrix3(1, 3, w3);
+    // std::vector<double> w4 = {-1.9, -5.6, 2.6, 5.7};
+    // Matrix Matrix4(1, 4, w4);
+    // const std::vector<Matrix>& weights = {Matrix1, Matrix2, Matrix3, Matrix4};
+    // mlp->setWeights(weights);
 
     // evoluciona el algoritmo genetico
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 100; i++) {
         // imprime la generacion actual
         std::cout << "Generation: " << genetic->getGeneration() << "\n";
         genetic->evolve();
@@ -47,8 +51,8 @@ int main(){
     }
 
     mlp = individuals[0]->getMLP();
-    mlp->setInputs(X[0]);
-    std::cout << "MLP inputs " << mlp->getInputs().size() << "\n";
+    // mlp->setInputs(X[0]);
+    // std::cout << "MLP inputs " << mlp->getInputs().size() << "\n";
     MLP_Display::display(*mlp);
 
     delete genetic;

@@ -34,8 +34,8 @@ MLP::~MLP() {
 // ================= Methods ==================
 
 void MLP::setInputs(const vector<double>& inputs) {
-    //cout << "Inputs: " << inputs.size() << " Esperados: " << _inputLayer->weights()[0].size()-1 << endl;
-    if (inputs.size() != _inputLayer->weights()[0].size()) {
+    // cout << "Inputs: " << inputs.size() << " Esperados: " << _inputLayer->weights()[0].size()-1 << endl;
+    if (inputs.size() != _inputLayer->weights()[0].size()-1) {
         throw invalid_argument("Number of inputs does not match the number of neurons in the input layer");
     }
 
@@ -48,13 +48,11 @@ vector<double> MLP::getOutputs() const {
     
     //Checks if _inputLayer is null and if _inputs is also null
     assert(_inputLayer != nullptr && "The MLP must have an input layer or there was an error while building");
-
-    _inputLayer->setInputs(_inputs);
     
-    vector<double> outputs = _inputLayer->feedForward();
+    vector<double> outputs = _inputs;
 
     // Send the outputs of each layer to the next layer
-    for (size_t i = 1; i < _layers.size(); i++) {
+    for (size_t i = 0; i < _layers.size(); i++) {
         _layers[i]->setInputs(outputs);
         outputs = _layers[i]->feedForward();
     }
@@ -244,7 +242,7 @@ MLP_Builder::MLP_Builder() {
 }
 
 MLP_Builder::~MLP_Builder() {
-    //delete _mlp;
+    // delete _mlp;
 }
 
 // =================================================

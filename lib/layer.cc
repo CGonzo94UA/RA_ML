@@ -34,11 +34,7 @@ void NeuralNetworkLayer::generateRandomWeights(size_t const& width_of_layer, siz
     // For each neuron in the layer (width_of_layer) generate num_weights+1 random weights (num_weights + 1 for the bias) where the bias is the first element of each neuron and has a value of 1
     for (size_t i = 0; i < width_of_layer; i++) {
         for (size_t j = 0; j < num_weights+1; j++) {
-            if (j == 0) {
-                _weights[i][j] = 1.0;
-            } else {
-                _weights[i][j] = generator.randomDouble(MIN_WEIGHT, MAX_WEIGHT);
-            }
+            _weights[i][j] = generator.randomDouble(MIN_WEIGHT, MAX_WEIGHT);
         }
     }
 
@@ -49,18 +45,13 @@ vector<double> NeuralNetworkLayer::feedForward() const {
 
     //Checks if there is an activation function
     assert(activationFunction != nullptr && "The layer must have an activation function or there was an error while building");
-    //cout << "Inputs: " << inputs.size() << " Esperados: " << _weights.rows() << endl;
+    
     vector<double> outputs;
-    // debug_msg_ln("Neuronas: " + _weights.rows(), 3);
-    // debug_msg_ln("Entradas: " + _inputs.size(), 3);
     for (size_t i = 0; i < _weights.rows(); i++) {
         double output = _weights[i][0];       // Bias
-        // debug_msg("Neurona " + i, 3);
-        // debug_msg_ln("Num pesos: " + _weights[i].size(), 3);
         for (size_t j = 1; j < _weights[i].size(); j++) {
-            // debug_msg("i: " + i, 3);
-            // debug_msg_ln("j: " + j, 3);
             output += _weights[i][j] * _inputs[j-1];
+            // cout << "output: " << output << " (WEIGHT: " << _weights[i][j] << " INPUT: " << _inputs[j-1] << ")" << endl;
         }        
         outputs.push_back(activationFunction(output));
         
@@ -87,7 +78,7 @@ vector<double> NeuralNetworkLayer::calculateGradients(const vector<double>& outp
     // Calcular la derivada de la función de activación (sigmoide en este caso)
     vector<double> activationDerivative;
     for (size_t i = 0; i < output.size(); ++i) {
-        activationDerivative.push_back(output[i] * (1.0 - output[i]));
+        activationDerivative.push_back(ActivationFunctions::sigmoid_prime(output[i]));
     }
 
     // Calcular los gradientes multiplicando los errores por la derivada de la activación
@@ -125,9 +116,10 @@ void NeuralNetworkLayer::updateWeights(double learningRate) {
 
     // Actualizar los pesos de las conexiones entre esta capa y la capa siguiente (forward pass)
     for (size_t i = 0; i < _weights.rows(); ++i) {
-        for (size_t j = 0; j < _weights[i].size(); ++j) {
+        _weights[i][0] -= learningRate * _gradients[i];
+        for (size_t j = 1; j < _weights[i].size(); ++j) {
             // Actualizar cada peso usando el descenso de gradiente
-            _weights[i][j] -= learningRate * _gradients[i] * _inputs[j];
+            _weights[i][j] -= learningRate * _gradients[i] * _inputs[j-1];
         }
     }
 

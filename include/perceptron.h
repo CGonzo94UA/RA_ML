@@ -14,6 +14,7 @@ class Perceptron{
         void train(Matrix const& X, Matrix const& Y, std::size_t const maxiter);
         double classify(const Matrix&);
         double test(Matrix const& X, Matrix const& Y) const;
+        static std::pair<Matrix, Matrix> readFromCSV(std::string const& filename);
 
     private:
         Matrix _weights;
