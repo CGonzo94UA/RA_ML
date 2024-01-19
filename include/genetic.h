@@ -30,8 +30,8 @@ private:
     std::vector<Individual*> individuals;
     int generation;
 
-    std::vector<Individual*> bestIndividuals(double n = 0.1);
-    std::vector<Individual*> nextGeneration(double n = 0.1);
+    std::vector<Individual*> bestIndividuals(double n = 0.5);
+    std::vector<Individual*> nextGeneration(double mutationRate = 0.9);
     
     
 };

@@ -31,7 +31,7 @@ int main(){
     // std::cout << "=======================================" << "\n";
 
     // evoluciona el algoritmo genetico
-    for (int i = 0; i < 200; i++) {
+    for (int i = 0; i < 100; i++) {
         // imprime la generacion actual
         std::cout << "Generation: " << genetic->getGeneration() << "\n";
         genetic->evolve();

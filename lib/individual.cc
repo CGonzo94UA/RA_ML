@@ -47,38 +47,24 @@ Individual* Individual::mate(const Individual &par2, double mutationChance)
     std::vector<Matrix> childWeights = mlp->getWeights();
     std::vector<Matrix> parentWeights = par2.mlp->getWeights();
     
-    // Calculate the cut point
-    int cut = round(generator.randomDouble(0.0, 1.0) * childWeights.size());
+    // Calculate the crossover_point point
+    //int crossover_point = round(generator.randomDouble(0.0, 1.0) * childWeights.size());
     
-    //std::cout << "cut: " << cut << std::endl;
-    for(int i=0; i < cut; ++i)
+    for(int i = 0; i < childWeights.size(); ++i)
     {
-        double p = generator.randomDouble(0, 1);
-        if(p > mutationChance) {
-            for (int j = 0; j < childWeights[i].rows(); j++) {
-                for (int k = 0; k < childWeights[i].cols(); k++) {
+        for (int j = 0; j < childWeights[i].rows(); ++j) {
+            for (int k = 0; k < childWeights[i].cols(); ++k) {
+                // Crossover uniforme
+                double crossover = generator.randomDouble(0, 1);
+                if(crossover < 0.5){
+                    childWeights[i][j][k] = parentWeights[i][j][k];
+                }
+                // Mutacion
+                double mutation = generator.randomDouble(0, 1);
+                if (mutation < mutationChance) {
                     childWeights[i][j][k] = generator.randomDouble(MIN_WEIGHT, MAX_WEIGHT);
                 }
             }
-        }
-    }
-    
-    for(int i = cut; i < childWeights.size(); ++i)
-    {
-        double p = generator.randomDouble(0, 1);
-        // std::cout << "p: " << p << std::endl;
-        if(p > mutationChance) {
-            // std::cout << "mutando" << std::endl;
-            for (int j = 0; j < childWeights[i].rows(); ++j) {
-                // std::cout << "j: " << j << std::endl;
-                for (int k = 0; k < childWeights[i].cols(); ++k) {
-                    // std::cout << "k: " << k << std::endl;
-                    childWeights[i][j][k] = generator.randomDouble(MIN_WEIGHT, MAX_WEIGHT);
-                }
-            }
-        } else {
-            // std::cout << "no mutando" << std::endl;
-            childWeights[i] = parentWeights[i];
         }
     }
 

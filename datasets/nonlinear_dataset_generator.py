@@ -30,6 +30,11 @@ class2_y = np.concatenate([
     np.random.uniform(-limite, -margen, num_puntos)
 ])
 
+# Redondear a 4 decimales
+class1_x = np.round(class1_x, decimals=4)
+class1_y = np.round(class1_y, decimals=4)
+class2_x = np.round(class2_x, decimals=4)
+class2_y = np.round(class2_y, decimals=4)
 
 # Crear un DataFrame con los datos
 data = pd.DataFrame({
